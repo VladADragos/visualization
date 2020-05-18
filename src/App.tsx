@@ -1,24 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Canvas from './Canvas';
+
+
 
 function App() {
+
+  let a: number = 0;
+  function draw(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>): void {
+    // drawRect(ctx, 0, 0, 50, 50);
+    drawTetrisPeice(ctx);
+
+  }
+
+  let offset = 0;
+  function drawTetrisPeice(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>) {
+    const size = 40;
+    drawRect(ctx, 100, 100 + offset, size, size * 3);
+    drawRect(ctx, 100 + size, 100 + size + offset, size, size);
+    offset += 1;
+  }
+
+
+
+
+  function drawRect(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>, x: number, y: number, h: number, w: number) {
+
+    ctx?.fillRect(x, y, w, h);
+  }
+
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Canvas width={800} height={400} animate={draw} stop={(a < 100)} />
     </div>
   );
 }
