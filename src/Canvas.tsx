@@ -4,18 +4,21 @@ interface canvasProps {
     width: number,
     height: number,
     animate(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>): void,
-    stop: boolean,
+    clear?: boolean
 }
 
 
-function Canvas({ width, height, animate, stop }: canvasProps): JSX.Element {
+function Canvas({ width, height, animate, clear = true }: canvasProps): JSX.Element {
 
     const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(null);
 
 
     function getCtx(f: (ctx: Undefinable<Nullable<CanvasRenderingContext2D>>) => void) {
         const ctx: Undefinable<Nullable<CanvasRenderingContext2D>> = canvasRef.current?.getContext('2d');
-        ctx?.clearRect(0, 0, width, height);
+        if (clear) {
+
+            ctx?.clearRect(0, 0, width, height);
+        }
         f(ctx);
     }
 

@@ -6,22 +6,27 @@ import Canvas from './Canvas';
 
 function App() {
 
-  let a: number = 0;
   function draw(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>): void {
-    // drawRect(ctx, 0, 0, 50, 50);
-    drawTetrisPeice(ctx);
+    drawTetrisPiece(ctx);
+    drawTetrisPiece(ctx, 200, 0);
+    drawTetrisPiece(ctx, 400, 0);
+    drawTetrisPiece(ctx, 600, 0);
+    drawTetrisPiece(ctx, 800, 0);
 
   }
 
   let offset = 0;
-  function drawTetrisPeice(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>) {
-    const size = 40;
-    drawRect(ctx, 100, 100 + offset, size, size * 3);
-    drawRect(ctx, 100 + size, 100 + size + offset, size, size);
-    offset += 1;
+  function drawTetrisPiece(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>, offsetX: number = 0, offsetY: number = 0) {
+    const size: number = 40;
+
+    drawRect(ctx, offsetX, offsetY + offset, size, size * 3);
+    drawRect(ctx, size + offsetX, size + offset + offsetY, size, size);
+    if (2 * size + offset < 400) {
+      offset += 1;
+    } else {
+      offset = 0;
+    }
   }
-
-
 
 
   function drawRect(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>, x: number, y: number, h: number, w: number) {
@@ -30,11 +35,9 @@ function App() {
   }
 
 
-
-
   return (
     <div className="App">
-      <Canvas width={800} height={400} animate={draw} stop={(a < 100)} />
+      <Canvas width={800} height={400} animate={draw} />
     </div>
   );
 }
