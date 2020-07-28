@@ -1,10 +1,13 @@
 import Renderer from "../canvas/Renderer";
 
-abstract class CShape {
+abstract class CShape implements IDrawable {
   origin: IVec2 = { x: 0, y: 0 };
   constructor(x: number, y: number) {
     this.origin.x = x;
     this.origin.y = y;
+  }
+  draw(renderer: any): void {
+    throw new Error("Method not implemented.");
   }
   abstract type(): string;
 }

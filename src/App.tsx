@@ -4,13 +4,6 @@ import Canvas from "./canvas/Canvas";
 import { CShape, CRect, CCircle } from "./shapes/Shapes";
 
 const App = (): JSX.Element => {
-  const s: VertexArray = [
-    { x: 0, y: 0 },
-    { x: 100, y: 0 },
-    { x: 50, y: 100 },
-  ];
-  const circle: ICircle = { origin: { x: 0, y: 0 }, radius: 100 };
-
   const t = new CRect(100, 100, 100, 100);
 
   const t2 = new CRect(500, 100, 100, 100);
@@ -18,10 +11,17 @@ const App = (): JSX.Element => {
   const t3 = new CRect(300, 0, 100, 100);
   const c = new CCircle(0, 0, 50);
 
-  const test: IDrawable[] = [t, t2, t3, c];
+  const test: CShape[] = [t, t2, t3, c];
+  function inc() {
+    for (const shape of test) {
+      shape.origin.x += 10;
+    }
+  }
+  console.log("app rendered");
   return (
     <div className="App">
       <Canvas width={800} height={400} data={test} />
+      <button onClick={inc}>plus 1</button>
     </div>
   );
 };

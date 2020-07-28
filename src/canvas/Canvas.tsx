@@ -1,41 +1,52 @@
 import React, { useRef, useEffect } from "react";
 import Renderer from "./Renderer";
-import { CShape, CRect } from "../shapes/Shapes";
 interface canvasProps {
   width: number;
   height: number;
   data: IDrawable[];
+  debug?: boolean;
 }
 
-const Canvas = ({ width, height, data }: canvasProps): JSX.Element => {
+const Canvas = ({
+  width,
+  height,
+  data,
+  debug = false,
+}: canvasProps): JSX.Element => {
+  if (debug) console.log("canvas mounted");
   const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(
     null
   );
-  const painter: React.MutableRefObject<Renderer> = useRef(new Renderer(null));
+  const rendererRef: React.MutableRefObject<Nullable<Renderer>> = useRef(null);
 
-  let i = 0;
+  let prevStep: number = 0;
   function draw(step: number) {
-    const test: IRect = {
-      origin: { x: 0 + i, y: 0 + i },
-      width: 100,
-      height: 100,
-    };
-    // painter.current = new Painter(canvasRef.current?.getContext("2d"));
-    painter.current.clear(width, height);
+    if (debug) console.log("fps " + (step - prevStep));
+    const renderer = rendererRef.current;
 
-    painter.current.drawAll(data);
+    renderer?.clear(width, height);
+    renderer?.drawText("hello world");
+
+    renderer?.drawAll(data);
+
+    prevStep = step;
     requestAnimationFrame(draw);
   }
 
   useEffect(() => {
-    console.log("first render");
+    if (debug) console.log("first render");
     const ctx = canvasRef.current?.getContext("2d");
-    painter.current = new Renderer(ctx);
-  }, []);
+
+    if (ctx !== null) {
+      rendererRef.current = new Renderer(ctx as CanvasRenderingContext2D);
+    } else {
+      console.log("context error");
+    }
+  }, [debug]);
 
   useEffect(() => {
     draw(0);
-    console.log("canvas drawn");
+    if (debug) console.log("canvas drawn");
   });
 
   return (
