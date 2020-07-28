@@ -1,3 +1,5 @@
+import Renderer from "../canvas/Renderer";
+
 abstract class CShape {
   origin: IVec2 = { x: 0, y: 0 };
   constructor(x: number, y: number) {
@@ -7,7 +9,7 @@ abstract class CShape {
   abstract type(): string;
 }
 
-class CRect extends CShape implements IRect {
+class CRect extends CShape implements IRect, IDrawable {
   width: number;
   height: number;
   constructor(x: number, y: number, width: number, height: number) {
@@ -18,9 +20,12 @@ class CRect extends CShape implements IRect {
   type(): string {
     return "rect";
   }
+  draw(renderer: Renderer): void {
+    renderer.drawRect(this);
+  }
 }
 
-class CTriangle extends CShape implements ITriangle {
+class CTriangle extends CShape implements ITriangle, IDrawable {
   width: number;
   height: number;
   constructor(x: number, y: number, width: number, height: number) {
@@ -31,9 +36,12 @@ class CTriangle extends CShape implements ITriangle {
   type(): string {
     return "triangle";
   }
+  draw(renderer: Renderer): void {
+    renderer.drawTriangle(this);
+  }
 }
 
-class CCircle extends CShape implements ICircle {
+class CCircle extends CShape implements ICircle, IDrawable {
   radius: number;
   constructor(x: number, y: number, radius: number) {
     super(x, y);
@@ -41,6 +49,9 @@ class CCircle extends CShape implements ICircle {
   }
   type(): string {
     return "circle";
+  }
+  draw(renderer: Renderer): void {
+    renderer.drawCircle(this);
   }
 }
 

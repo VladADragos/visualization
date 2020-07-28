@@ -1,40 +1,32 @@
 import { CShape, CRect, CCircle, CTriangle } from "../shapes/Shapes";
 
-export default class Painter {
-  ctx: Undefinable<Nullable<CanvasRenderingContext2D>>;
+export default class Renderer {
+  renderContext: Undefinable<Nullable<CanvasRenderingContext2D>>;
 
-  constructor(ctx: Undefinable<Nullable<CanvasRenderingContext2D>>) {
-    this.ctx = ctx;
+  constructor(renderContext: Undefinable<Nullable<CanvasRenderingContext2D>>) {
+    this.renderContext = renderContext;
   }
 
-  drawAll(shapes: CShape[]) {
-    for (const shape of shapes)
-      switch (shape.type()) {
-        case "rect":
-          this.drawRect(shape as CRect);
-        case "triangle":
-          this.drawTriangle(shape as CTriangle);
-        case "circle":
-          this.drawCircle(shape as CCircle);
-        default:
-          console.log("defualt");
-      }
+  drawAll(shapes: IDrawable[]) {
+    for (const shape of shapes) {
+      shape.draw(this);
+    }
   }
   offset: number = 0;
   drawRect(rect: IRect) {
     const { origin, width, height } = rect;
-    this.ctx?.fillRect(origin.x, origin.y, width, height);
+    this.renderContext?.fillRect(origin.x, origin.y, width, height);
   }
 
   clear(width: number, height: number): void {
-    this.ctx?.clearRect(0, 0, width, height);
+    this.renderContext?.clearRect(0, 0, width, height);
   }
 
   drawCircle(circle: ICircle, fill: boolean = true) {
     const { origin, radius } = circle;
-    this.ctx?.beginPath();
+    this.renderContext?.beginPath();
 
-    this.ctx?.arc(
+    this.renderContext?.arc(
       origin.x + radius,
       origin.y + radius,
       radius,
@@ -43,33 +35,33 @@ export default class Painter {
       true
     );
     if (fill) {
-      this.ctx?.fill();
+      this.renderContext?.fill();
     }
-    this.ctx?.stroke();
+    this.renderContext?.stroke();
 
     // this.ctx?.fillRect(x, y, w, h);
   }
   drawTriangle(triangle: ITriangle, fill: boolean = true) {
     const { origin, width, height }: ITriangle = triangle;
-    this.ctx?.beginPath();
-    this.ctx?.moveTo(origin.x, origin.y);
+    this.renderContext?.beginPath();
+    this.renderContext?.moveTo(origin.x, origin.y);
 
-    this.ctx?.lineTo(origin.x + width, origin.y);
-    this.ctx?.lineTo(origin.x + width * 0.5, origin.y + height);
-    this.ctx?.closePath();
-    this.ctx?.fill();
+    this.renderContext?.lineTo(origin.x + width, origin.y);
+    this.renderContext?.lineTo(origin.x + width * 0.5, origin.y + height);
+    this.renderContext?.closePath();
+    this.renderContext?.fill();
   }
 
   drawPoly(array: VertexArray) {
-    this.ctx?.beginPath();
-    this.ctx?.moveTo(array[0].x, array[0].y);
+    this.renderContext?.beginPath();
+    this.renderContext?.moveTo(array[0].x, array[0].y);
     for (let i: number = 1; i < array.length; i++) {
       let vertex: IVec2 = array[i];
 
-      this.ctx?.lineTo(vertex.x, vertex.y);
+      this.renderContext?.lineTo(vertex.x, vertex.y);
     }
-    this.ctx?.closePath();
-    this.ctx?.fill();
+    this.renderContext?.closePath();
+    this.renderContext?.fill();
   }
 
   drawTetrisPiece(offsetX: number = 0, offsetY: number = 0) {

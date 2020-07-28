@@ -18,7 +18,7 @@ const App = (): JSX.Element => {
   const t3 = new CRect(300, 0, 100, 100);
   const c = new CCircle(0, 0, 50);
 
-  const test: CShape[] = [t, t2, t3, c];
+  const test: IDrawable[] = [t, t2, t3, c];
   return (
     <div className="App">
       <Canvas width={800} height={400} data={test} />

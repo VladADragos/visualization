@@ -1,17 +1,17 @@
 import React, { useRef, useEffect } from "react";
-import Painter from "./Painter";
+import Renderer from "./Renderer";
 import { CShape, CRect } from "../shapes/Shapes";
 interface canvasProps {
   width: number;
   height: number;
-  data: CShape[];
+  data: IDrawable[];
 }
 
 const Canvas = ({ width, height, data }: canvasProps): JSX.Element => {
   const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(
     null
   );
-  const painter: React.MutableRefObject<Painter> = useRef(new Painter(null));
+  const painter: React.MutableRefObject<Renderer> = useRef(new Renderer(null));
 
   let i = 0;
   function draw(step: number) {
@@ -30,7 +30,7 @@ const Canvas = ({ width, height, data }: canvasProps): JSX.Element => {
   useEffect(() => {
     console.log("first render");
     const ctx = canvasRef.current?.getContext("2d");
-    painter.current = new Painter(ctx);
+    painter.current = new Renderer(ctx);
   }, []);
 
   useEffect(() => {
