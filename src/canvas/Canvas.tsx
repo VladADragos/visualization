@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Renderer from "./Renderer";
-interface canvasProps {
+interface canvasProps
+{
   width: number;
   height: number;
   data: IDrawable[];
@@ -14,14 +15,16 @@ const Canvas = ({
   data,
   debug = false,
   animation: move,
-}: canvasProps): JSX.Element => {
+}: canvasProps): JSX.Element =>
+{
   if (debug) console.log("canvas mounted");
   const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(
     null
   );
   const rendererRef: React.MutableRefObject<Nullable<Renderer>> = useRef(null);
   let prevStep: number = 0;
-  function draw(step: number) {
+  function draw(step: number)
+  {
     if (debug) console.log("fps " + (step - prevStep));
     const renderer = rendererRef.current;
 
@@ -36,7 +39,8 @@ const Canvas = ({
     requestAnimationFrame(draw);
   }
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     if (debug) console.log("first render");
     const ctx = canvasRef.current?.getContext("2d");
 
@@ -47,7 +51,8 @@ const Canvas = ({
     }
   }, [debug]);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     draw(0);
     if (debug) console.log("canvas drawn");
   });

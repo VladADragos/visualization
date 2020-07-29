@@ -4,7 +4,8 @@ import Canvas from "./canvas/Canvas";
 import { CShape, CRect, CCircle } from "./shapes/Shapes";
 import { forEach, create2DArray } from "./utils/utils";
 
-const App = (): JSX.Element => {
+const App = (): JSX.Element =>
+{
   const width: number = 800,
     height: number = 400;
 
@@ -14,14 +15,18 @@ const App = (): JSX.Element => {
   const c = new CCircle(0, 0, 50);
 
   const shapes: CShape[] = [t, t2, t3, c];
-  function inc() {
-    forEach(shapes, (shape) => {
+  function inc()
+  {
+    forEach(shapes, (shape) =>
+    {
       shape.origin.x += 10;
     });
   }
 
-  function move(step: number) {
-    forEach(shapes, (shape) => {
+  function move(step: number)
+  {
+    forEach(shapes, (shape) =>
+    {
       shape.origin.y += step / 4;
       if (shape.origin.y > 400) {
         shape.origin.y = 0;
