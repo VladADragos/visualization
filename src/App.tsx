@@ -29,15 +29,11 @@ const App = (): JSX.Element => {
     });
   }
 
-  const test = create2DArray(2, 2, () => 100);
-
-  console.log(test);
-
   console.log("app rendered");
   return (
     <div className="App">
       <Canvas width={width} height={height} data={shapes} animation={move} />
-      <button onClick={() => { console.log(test); }}>plus 1</button>
+      <button onClick={inc}>plus 1</button>
     </div>
   );
 };
