@@ -66,28 +66,4 @@ export default class Renderer {
     this.renderContext.fill();
   }
 
-  drawTetrisPiece(offsetX: number = 0, offsetY: number = 0) {
-    const size: number = 40;
-    console.log("tetris");
-
-    const rect: IRect = {
-      origin: { x: offsetX, y: offsetY + this.offset },
-      width: size,
-      height: size * 3,
-    };
-    this.drawRect(rect);
-
-    const rect2: IRect = {
-      origin: { x: size + offsetX, y: size + this.offset + offsetY },
-      width: size,
-      height: size,
-    };
-
-    this.drawRect(rect2);
-    if (2 * size + this.offset < 400) {
-      this.offset += 1;
-    } else {
-      this.offset = 0;
-    }
-  }
 }

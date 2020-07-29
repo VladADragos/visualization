@@ -5,6 +5,7 @@ interface canvasProps {
   height: number;
   data: IDrawable[];
   debug?: boolean;
+  animation?: (step: number) => void;
 }
 
 const Canvas = ({
@@ -12,13 +13,13 @@ const Canvas = ({
   height,
   data,
   debug = false,
+  animation: move,
 }: canvasProps): JSX.Element => {
   if (debug) console.log("canvas mounted");
   const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(
     null
   );
   const rendererRef: React.MutableRefObject<Nullable<Renderer>> = useRef(null);
-
   let prevStep: number = 0;
   function draw(step: number) {
     if (debug) console.log("fps " + (step - prevStep));
@@ -26,7 +27,9 @@ const Canvas = ({
 
     renderer?.clear(width, height);
     renderer?.drawText("hello world");
-
+    if (move !== undefined) {
+      move(step - prevStep);
+    }
     renderer?.drawAll(data);
 
     prevStep = step;
