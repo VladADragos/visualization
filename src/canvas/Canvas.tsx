@@ -15,7 +15,7 @@ const Canvas = ({
   height,
   data,
   debug = false,
-  animation: move,
+  animation,
 }: canvasProps): JSX.Element =>
 {
   if (debug) console.log("canvas mounted");
@@ -30,8 +30,8 @@ const Canvas = ({
     const renderer = rendererRef.current;
 
     renderer?.clear(width, height);
-    if (move !== undefined) {
-      move(step - prevStep, step);
+    if (animation !== undefined) {
+      animation(step - prevStep, step);
     }
     renderer?.drawAll(data);
 

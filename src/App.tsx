@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import Canvas from "./canvas/Canvas";
 import CellularAutomata from './cellularAutomata/CellularAutomata';
 import { forEach } from "./utils/utils";
 import Colors from './cellularAutomata/Colors';
 import { setInterval } from "timers";
-
+// import useEffect from 'react';
+let print = console.log;
 const App = (): JSX.Element =>
 {
   const width: number = 800,
@@ -21,31 +22,28 @@ const App = (): JSX.Element =>
 
   }
 
-  let hasSpawed = false;
-  function move(step: number, time: number)
+  // useEffect(() =>
+  // {
+  //   cellularAutomata.spawn();
+  // })
+  useEffect(() =>
   {
-    // console.log(step);
-    // console.log(time);
-    // console.log();
-    // if ((time % 2) > 1.5) {
-    // console.log("test");
-    // }
-    // setInterval(() =>
-    // {
-    //   console.log("test")
-    // }, 1000);
-    // if (step % 16) {
-    // }
-    // if (!hasSpawed) {
-    //   cellularAutomata.spawn();
-    // }
-    // cellularAutomata.nextGen();
-  }
-  console.log(cellularAutomata.field);
+    const interval: NodeJS.Timeout = setInterval(() => cellularAutomata.nextGen(), 300);
+
+    return () => clearInterval(interval);
+  }, [])
+  useEffect(() =>
+  {
+    const interval: NodeJS.Timeout = setInterval(() => cellularAutomata.spawn(), 2000);
+
+    return () => clearInterval(interval);
+  }, [])
+
+
 
   return (
     <div className="App">
-      <Canvas width={width} height={height} data={cellularAutomata.getArray2d()} animation={move} />
+      <Canvas width={width} height={height} data={cellularAutomata.getArray2d()} />
       <button onClick={inc}>spawn</button>
       <button onClick={() => cellularAutomata.nextGen()}>next gen</button>
       <button onClick={() => cellularAutomata.formatPrint()}>print</button>

@@ -32,7 +32,14 @@ function create2DArray<T>(width: number, height: number, initializer: () => T): 
 }
 
 
-export { forEach, create2DArray };
+// min<=x<max
+function randomInt(min: number, max: number)
+{
+    return Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+
+
+export { forEach, create2DArray, randomInt };
 
 
 
