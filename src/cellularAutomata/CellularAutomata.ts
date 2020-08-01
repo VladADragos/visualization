@@ -2,15 +2,13 @@ import { create2DArray, forEach, randomInt } from '../utils/utils';
 import { CRect, CShape } from '../shapes/Shapes';
 import Colors from './Colors';
 import CellStates from './CellStates';
-import { CONNREFUSED } from 'dns';
-class CellularAutomata
+class CellularAutomata implements IObservable
 {
   cellSize: number;
   field: number[][];
   height: number;
   width: number;
-  // TODO: optimize to not use [] but new Array() so that it does not resize when creating it
-  visualArray: CShape[] = [];
+  observers: IObserver[] = [];
 
   constructor(width: number, height: number, cellSize: number)
   {
@@ -19,48 +17,50 @@ class CellularAutomata
     this.field = create2DArray(this.width, this.height, () => 0);
     this.cellSize = cellSize;
   }
-
-  getArray2d(): IDrawable[]
+  subscribe(observer: IObserver): void
   {
-    if (this.visualArray.length < 1) {
-      for (let i = 0; i < this.height; i++) {
-        // console.log(this.field[i])
-        forEach(this.field[i], (element, j) =>
-        {
-          j = (j as number);
-          let rect = new CRect(j * this.cellSize + 0, i * this.cellSize + 0, this.cellSize, this.cellSize);
+    this.observers.push(observer);
+  }
 
-          if (element === CellStates.alive) {
-            if (!this.isInAir(i, j)) {
-              rect.color = Colors.air;
-            }
-          } else {
-            rect.color = Colors.empty;
-
-          }
-
-          this.visualArray.push(rect);
-        })
+  notifyMove(from: index, to: index): void
+  {
+    if (this.observers.length !== 0) {
+      for (const observer of this.observers) {
+        observer.onMove(from, to);
       }
     }
-    return this.visualArray;
   }
+  notifySpawn(spawnLocation: number): void
+  {
+    if (this.observers.length !== 0) {
+      for (const observer of this.observers) {
+        observer.onSpawn(spawnLocation);
+      }
+    }
+  }
+
+
 
 
   spawn()
   {
-    this.field[0][1] = 1;
-    this.visualArray[this.to2Dindex(0, 1)].color = Colors.air;
+    const ranIndex = randomInt(0, this.width);
+    this.field[0][ranIndex] = 1;
+    this.notifySpawn(ranIndex);
+
+  }
+
+  spawn2(index: number)
+  {
+    this.field[0][index] = 1;
+    this.notifySpawn(index);
   }
   isInAir(x: number, y: number): boolean
   {
     return y + 1 < this.height && this.field[y + 1][x] === 0;
   }
 
-  to2Dindex(width: number, height: number): number
-  {
-    return height + width * this.width;
-  }
+
   nextGen(): void
   {
     const indicesArray: { from: index, to: index }[] = [];
@@ -71,7 +71,6 @@ class CellularAutomata
             indicesArray.push({ from: { x: j, y: i }, to: this.down(j, i) });
           } else if (this.getLeftRight(j, i).length > 0) {
             const ns = this.getLeftRight(j, i);
-            console.log(ns);
             if (ns.length === 2) {
               const ranNum: number = randomInt(0, 1);
               indicesArray.push({ from: { x: j, y: i }, to: ns[ranNum] });
@@ -95,8 +94,10 @@ class CellularAutomata
   {
     this.field[from.y][from.x] = 0;
     this.field[to.y][to.x] = 1;
-    this.visualArray[this.to2Dindex(from.y, from.x)].color = Colors.empty;
-    this.visualArray[this.to2Dindex(to.y, to.x)].color = Colors.air;
+
+    this.notifyMove(from, to);
+    // this.visualArray[this.to2Dindex(from.y, from.x)].color = Colors.empty;
+    // this.visualArray[this.to2Dindex(to.y, to.x)].color = Colors.air;
   }
 
   printFieldVal(x: number, y: number)
@@ -123,14 +124,7 @@ class CellularAutomata
   {
     return this.field[index.y][index.x] === CellStates.dead;
   }
-  moveDown(x: number, y: number)
-  {
 
-    this.field[y][x] = 0;
-    this.field[y + 1][x] = 1;
-    this.visualArray[this.to2Dindex(y, x)].color = Colors.empty;
-    this.visualArray[this.to2Dindex(y + 1, x)].color = Colors.air;
-  }
 
   formatPrint()
   {

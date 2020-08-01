@@ -6,11 +6,13 @@ interface IDrawable
 interface IObservable
 {
   observers: IObservers[]
-  notify: () => void;
+  notifySpawn(spawnLocation: number): void;
+  notifyMove(from: index, to: index): void;
+  subscribe(observer: IObserver): void;
 }
 interface IObserver
 {
-  subscribe: (observer: IObservable) => void;
-  update(): () => void;
+  onSpawn(spawnLocation: number): void;
+  onMove(from: index, to: index): void;
 
 }

@@ -31,6 +31,10 @@ function create2DArray<T>(width: number, height: number, initializer: () => T): 
     return array as T[][];
 }
 
+function get2dIndexAs1d(x: number, y: number, width: number): number
+{
+    return y + x * width;
+}
 
 // min<=x<max
 function randomInt(min: number, max: number)
@@ -39,7 +43,7 @@ function randomInt(min: number, max: number)
 }
 
 
-export { forEach, create2DArray, randomInt };
+export { forEach, create2DArray, randomInt, get2dIndexAs1d };
 
 
 

@@ -62,7 +62,7 @@ const Canvas = ({
       width={width}
       height={height}
       ref={canvasRef}
-      style={{ border: "3px red solid" }}
+      style={{ border: "3px gray solid" }}
     />
   );
 };
