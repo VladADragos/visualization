@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Renderer from "./Renderer";
 import { CShape } from "../shapes/Shapes";
-interface canvasProps
-{
+interface canvasProps {
   width: number;
   height: number;
   data: IDrawable[];
@@ -16,16 +15,14 @@ const Canvas = ({
   data,
   debug = false,
   animation,
-}: canvasProps): JSX.Element =>
-{
+}: canvasProps): JSX.Element => {
   if (debug) console.log("canvas mounted");
   const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(
     null
   );
   const rendererRef: React.MutableRefObject<Nullable<Renderer>> = useRef(null);
   let prevStep: number = 0;
-  function draw(step: number)
-  {
+  function draw(step: number) {
     if (debug) console.log("fps " + (step - prevStep));
     const renderer = rendererRef.current;
 
@@ -39,24 +36,28 @@ const Canvas = ({
     requestAnimationFrame(draw);
   }
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     if (debug) console.log("first render");
     const ctx = canvasRef.current?.getContext("2d");
 
-    if (ctx !== null) {
-      rendererRef.current = new Renderer(ctx as CanvasRenderingContext2D);
+    if (ctx) {
+      rendererRef.current = new Renderer(ctx);
     } else {
-      console.log("context error");
+      console.error("Context was not set");
     }
   }, [debug]);
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     draw(0);
     if (debug) console.log("canvas drawn");
   });
 
+  useEffect(() => {
+    if (rendererRef.current) {
+      const x = rendererRef.current;
+    }
+  });
+  console.log("canvas render");
   return (
     <canvas
       width={width}

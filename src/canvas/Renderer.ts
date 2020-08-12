@@ -1,51 +1,38 @@
-export default class Renderer
-{
+export default class Renderer {
   renderContext: CanvasRenderingContext2D;
   font: string = "16px serif";
   defaultColor = "#000";
-  constructor(renderContext: CanvasRenderingContext2D)
-  {
+  constructor(renderContext: CanvasRenderingContext2D) {
     this.renderContext = renderContext;
   }
 
-  drawAll(shapes: IDrawable[])
-  {
+  drawAll(shapes: IDrawable[]) {
     for (const shape of shapes) {
       shape.draw(this);
     }
   }
 
-  drawText(text: string)
-  {
+  drawText(text: string) {
     this.renderContext.fillText(text, 500, 200);
   }
   offset: number = 0;
-  drawRect(rect: IRect, color = "#000")
-  {
+  drawRect(rect: IRect, color = "#000") {
     // this.renderContext.fillStyle = color;
-    this.renderWithColor(color, () =>
-    {
-
+    this.renderWithColor(color, () => {
       const { origin, width, height } = rect;
       this.renderContext.fillRect(origin.x, origin.y, width, height);
       // this.renderContext.strokeRect(origin.x, origin.y, width, height);
-    })
-
+    });
 
     // this.renderContext.fillStyle = this.defaultColor;
   }
 
-  clear(width: number, height: number): void
-  {
+  clear(width: number, height: number): void {
     this.renderContext.clearRect(0, 0, width, height);
   }
 
-  drawCircle(circle: ICircle, fill: boolean = true, color = "#000")
-  {
-
-    this.renderWithColor(color, () =>
-    {
-
+  drawCircle(circle: ICircle, fill: boolean = true, color = "#000") {
+    this.renderWithColor(color, () => {
       const { origin, radius } = circle;
 
       this.renderContext.beginPath();
@@ -61,13 +48,10 @@ export default class Renderer
         this.renderContext.fill();
       }
       this.renderContext.stroke();
-    })
-
+    });
   }
-  drawTriangle(triangle: ITriangle, fill: boolean = true, color = "#000")
-  {
-    this.renderWithColor(color, () =>
-    {
+  drawTriangle(triangle: ITriangle, fill: boolean = true, color = "#000") {
+    this.renderWithColor(color, () => {
       const { origin, width, height }: ITriangle = triangle;
       this.renderContext.beginPath();
       this.renderContext.moveTo(origin.x, origin.y);
@@ -77,13 +61,10 @@ export default class Renderer
       this.renderContext.closePath();
       this.renderContext.fill();
     });
-
   }
 
-  drawPoly(array: VertexArray, color = "#000")
-  {
-    this.renderWithColor(color, () =>
-    {
+  drawPoly(array: VertexArray, color = "#000") {
+    this.renderWithColor(color, () => {
       this.renderContext.beginPath();
       this.renderContext.moveTo(array[0].x, array[0].y);
       for (let i: number = 1; i < array.length; i++) {
@@ -93,12 +74,10 @@ export default class Renderer
       }
       this.renderContext.closePath();
       this.renderContext.fill();
-    })
+    });
   }
 
-
-  renderWithColor(color: string, fn: () => void)
-  {
+  renderWithColor(color: string, fn: () => void) {
     this.renderContext.fillStyle = color;
     this.renderContext.strokeStyle = color;
     fn();
@@ -106,5 +85,4 @@ export default class Renderer
     this.renderContext.strokeStyle = this.defaultColor;
     this.renderContext.fillStyle = this.defaultColor;
   }
-
 }
