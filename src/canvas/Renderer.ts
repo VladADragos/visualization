@@ -77,6 +77,10 @@ export default class Renderer {
     });
   }
 
+  drawSvg(svg: CanvasImageSource, dy: number, dx: number) {
+    this.renderContext.drawImage(svg, dx, dy);
+  }
+
   renderWithColor(color: string, fn: () => void) {
     this.renderContext.fillStyle = color;
     this.renderContext.strokeStyle = color;

@@ -29,22 +29,22 @@ const CellularAutomataComponent = ({
   //   return () => clearInterval(interval);
   // }, [freeze, cellularAutomata]);
 
-  let i = 0;
-  useEffect(() => {
-    const interval2: NodeJS.Timeout = setInterval(() => {
-      if (!freeze) cellularAutomata.nextGen();
-    }, 50);
+  // let i = 0;
+  // useEffect(() => {
+  //   const interval2: NodeJS.Timeout = setInterval(() => {
+  //     if (!freeze) cellularAutomata.nextGen();
+  //   }, 50);
 
-    const interval: NodeJS.Timeout = setInterval(() => {
-      if (!freeze) cellularAutomata.spawn();
-      i += 100;
-    }, 300 + i);
+  //   const interval: NodeJS.Timeout = setInterval(() => {
+  //     if (!freeze) cellularAutomata.spawn();
+  //     i += 100;
+  //   }, 300 + i);
 
-    return () => {
-      clearInterval(interval);
-      clearInterval(interval2);
-    };
-  }, [freeze, cellularAutomata]);
+  //   return () => {
+  //     clearInterval(interval);
+  //     clearInterval(interval2);
+  //   };
+  // }, [freeze, cellularAutomata]);
 
   console.log("ca root");
   return (
