@@ -9,7 +9,8 @@ optimization:
     ☐ see if stopping can be omproved
 bugs:
     ☐ fix bug(the cell in the first row sometimes freezes)
-    ☐ fix formatPrint to work with 1d array
+    ✔ fix formatPrint to work with 1d array @done(20-08-15 12:23)
+    ☐ cells sometimes disappear upon landing 
 
 features:
     ☐ more states?

@@ -7,7 +7,8 @@ const CellularAutomataComponent = ({
   width,
   height,
   cellSize,
-}: CellularAutomataComponentProps): JSX.Element => {
+}: CellularAutomataComponentProps): JSX.Element =>
+{
   const canvasWidth: number = width * cellSize;
   const canvasHeight: number = height * cellSize;
 
@@ -21,30 +22,30 @@ const CellularAutomataComponent = ({
     new CellularAutomataVisualizer(cellularAutomata, width, height, cellSize)
   );
 
-  // useEffect(() => {
-  //   const interval: NodeJS.Timeout = setInterval(() => {
-  //     if (!freeze) cellularAutomata.nextGen();
-  //   }, 50);
-
-  //   return () => clearInterval(interval);
-  // }, [freeze, cellularAutomata]);
-
-  // let i = 0;
-  // useEffect(() => {
-  //   const interval2: NodeJS.Timeout = setInterval(() => {
-  //     if (!freeze) cellularAutomata.nextGen();
-  //   }, 50);
-
-  //   const interval: NodeJS.Timeout = setInterval(() => {
-  //     if (!freeze) cellularAutomata.spawn();
-  //     i += 100;
-  //   }, 300 + i);
-
-  //   return () => {
-  //     clearInterval(interval);
-  //     clearInterval(interval2);
-  //   };
-  // }, [freeze, cellularAutomata]);
+  useEffect(() =>
+  {
+    const interval: NodeJS.Timeout = setInterval(() =>
+    {
+      if (!freeze) cellularAutomata.nextGen();
+    }, 50)
+    return () => clearInterval(interval);
+  }, [freeze, cellularAutomata])
+  useEffect(() =>
+  {
+    const interval2: NodeJS.Timeout = setInterval(() =>
+    {
+      if (!freeze) cellularAutomata.nextGen();
+    }, 400)
+    const interval: NodeJS.Timeout = setInterval(() =>
+    {
+      if (!freeze) cellularAutomata.spawn();
+    }, 800)
+    return () =>
+    {
+      clearInterval(interval);
+      clearInterval(interval2);
+    };
+  }, [freeze, cellularAutomata]);
 
   console.log("ca root");
   return (
@@ -63,12 +64,14 @@ const CellularAutomataComponent = ({
   );
 };
 
-interface ButtonsProps {
+interface ButtonsProps
+{
   freeze: boolean;
   setFreeze: React.Dispatch<React.SetStateAction<boolean>>;
   cellularAutomata: CellularAutomata;
 }
-const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) => {
+const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) =>
+{
   return (
     <div className="buttons">
       <button onClick={() => setFreeze(!freeze)}>
@@ -83,7 +86,8 @@ const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) => {
   );
 };
 
-interface CellularAutomataComponentProps {
+interface CellularAutomataComponentProps
+{
   width: number;
   height: number;
   cellSize: number;
