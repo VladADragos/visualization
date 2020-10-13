@@ -7,7 +7,8 @@ const CellularAutomataComponent = ({
   width,
   height,
   cellSize,
-}: CellularAutomataComponentProps): JSX.Element => {
+}: CellularAutomataComponentProps): JSX.Element =>
+{
   const canvasWidth: number = width * cellSize;
   const canvasHeight: number = height * cellSize;
 
@@ -63,15 +64,21 @@ const CellularAutomataComponent = ({
   );
 };
 
+<<<<<<< HEAD
 
 
 
 interface ButtonsProps {
+=======
+interface ButtonsProps
+{
+>>>>>>> 79f26659e4088eba4b8c7958d3be04985555d08e
   freeze: boolean;
   setFreeze: React.Dispatch<React.SetStateAction<boolean>>;
   cellularAutomata: CellularAutomata;
 }
-const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) => {
+const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) =>
+{
   return (
     <div className="buttons">
       <button onClick={() => setFreeze(!freeze)}>
@@ -86,7 +93,8 @@ const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) => {
   );
 };
 
-interface CellularAutomataComponentProps {
+interface CellularAutomataComponentProps
+{
   width: number;
   height: number;
   cellSize: number;
