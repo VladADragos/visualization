@@ -64,15 +64,8 @@ const CellularAutomataComponent = ({
   );
 };
 
-<<<<<<< HEAD
-
-
-
-interface ButtonsProps {
-=======
 interface ButtonsProps
 {
->>>>>>> 79f26659e4088eba4b8c7958d3be04985555d08e
   freeze: boolean;
   setFreeze: React.Dispatch<React.SetStateAction<boolean>>;
   cellularAutomata: CellularAutomata;
