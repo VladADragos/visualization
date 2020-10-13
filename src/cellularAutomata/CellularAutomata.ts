@@ -43,7 +43,7 @@ class CellularAutomata implements IObservable {
   }
 
   spawn() {
-    const ranIndex = randomInt(0, this.width);
+    const ranIndex = randomInt(0, this.width-1);
     this.grid.set(0, ranIndex, 1);
     this.notifySpawn(ranIndex);
   }
@@ -79,14 +79,9 @@ class CellularAutomata implements IObservable {
     return { x, y: y + 1 };
   }
   switchPlaces(from: index, to: index): void {
-    this.grid.set(from.y, from.x, 0);
-    this.grid.set(to.y, to.x, 1);
-    // this.field[from.y][from.x] = 0;
-    // this.field[to.y][to.x] = 1;
-
+    this.grid.set(from.y, from.x, CellStates.dead);
+    this.grid.set(to.y, to.x, CellStates.alive);
     this.notifyMove(from, to);
-    // this.visualArray[this.to2Dindex(from.y, from.x)].color = Colors.empty;
-    // this.visualArray[this.to2Dindex(to.y, to.x)].color = Colors.air;
   }
 
   printFieldVal(y: number, x: number) {
@@ -96,14 +91,13 @@ class CellularAutomata implements IObservable {
     const retArr: index[] = [];
     if (y + 1 < this.height) {
       if (x - 1 > -1 && this.isEmpty({ x: x - 1, y: y + 1 })) {
-        retArr.push({ x: y - 1, y: y + 1 });
+        retArr.push({ x: x - 1, y: y + 1 });
       }
 
       if (x + 1 < this.width && this.isEmpty({ x: x + 1, y: y + 1 })) {
         retArr.push({ x: x + 1, y: y + 1 });
       }
     }
-
     return retArr;
   }
 
@@ -124,16 +118,7 @@ class CellularAutomata implements IObservable {
       }
       str += "\n";
     }
-    // forEach(this.field, (row) => {
-    //   forEach(row, (cell) => {
-    //     if (cell === CellStates.alive) {
-    //       str += "o";
-    //     } else {
-    //       str += "#";
-    //     }
-    //   });
-    //   str += "\n";
-    // });
+
     console.log(str);
   }
 }

@@ -27,7 +27,7 @@ const Canvas = ({
   const rendererRef: React.MutableRefObject<Nullable<Renderer>> = useRef(null);
   let prevStep: number = 0;
   let i = 0;
-  function draw(step: number) {
+  function draw(step: number): number {
     if (debug) console.log("fps " + (step - prevStep));
     const renderer = rendererRef.current;
     if (renderer) {
@@ -41,8 +41,9 @@ const Canvas = ({
       // console.log(Img);
       // renderer.drawSvg(Img, 0, 0);
       prevStep = step;
-      requestAnimationFrame(draw);
+      return requestAnimationFrame(draw);
     }
+    return 0;
   }
 
   useEffect(() => {
@@ -57,8 +58,9 @@ const Canvas = ({
   }, [debug]);
 
   useEffect(() => {
-    draw(0);
+    const handle =  draw(0);
     if (debug) console.log("canvas drawn");
+    return ()=> cancelAnimationFrame(handle);
   });
 
   useEffect(() => {
