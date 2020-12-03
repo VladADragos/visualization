@@ -32,18 +32,18 @@ const CellularAutomataComponent = ({
 
   // let i = 0;
   useEffect(() => {
-    cellularAutomata.spawn();
+    cellularAutomata.initialize();
     const interval2: NodeJS.Timeout = setInterval(() => {
-      if (!freeze) cellularAutomata.nextGen();
-    }, 50);
+      if (!freeze) cellularAutomata.nextGenLine();
+    }, 1);
 
-    const interval: NodeJS.Timeout = setInterval(() => {
-      if (!freeze) cellularAutomata.spawn();
-    }, 300);
+    // const interval: NodeJS.Timeout = setInterval(() => {
+    //   if (!freeze) cellularAutomata.nextGenLine();
+    // }, 300);
 
     return () => {
-      clearInterval(interval);
       clearInterval(interval2);
+      // clearInterval(interval2);
     };
   }, [freeze, cellularAutomata]);
 
@@ -74,14 +74,16 @@ const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) =>
 {
   return (
     <div className="buttons">
-      <button onClick={() => setFreeze(!freeze)}>
+      {/* <button onClick={() => setFreeze(!freeze)}>
         {freeze ? "play" : "pause"}
-      </button>
-      <button onClick={() => cellularAutomata.spawn()}>spawn</button>
-      <button onClick={() => cellularAutomata.nextGen()}>next</button>
-      <button onClick={() => cellularAutomata.reset()}>reset</button>
-      <button onClick={() => cellularAutomata.grid.print()}>cells</button>
-      <button onClick={() => cellularAutomata.formatPrint()}>array</button>
+      </button> */}
+      <button onClick={() => cellularAutomata.initialize()}>init</button>
+      <button onClick={() => cellularAutomata.nextGenLine()}>nextLine</button>
+      {/* <button onClick={() => cellularAutomata.spawn()}>spawn</button> */}
+      {/* <button onClick={() => cellularAutomata.nextGen()}>next</button> */}
+      {/* <button onClick={() => cellularAutomata.reset()}>reset</button> */}
+      {/* <button onClick={() => cellularAutomata.grid.print()}>cells</button> */}
+      <button onClick={() => cellularAutomata.formatPrintLine()}>print line</button>
     </div>
   );
 };

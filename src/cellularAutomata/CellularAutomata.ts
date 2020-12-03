@@ -2,21 +2,33 @@ import { forEach, randomInt, get2dIndexAs1d, Array2D } from "../utils/utils";
 import { CRect, CShape } from "../shapes/Shapes";
 import Colors from "./Colors";
 import CellStates from "./CellStates";
+import Rules from "./Rules";
 class CellularAutomata implements IObservable {
   grid: Array2D<number>;
+  lineBuffer: number[];
+  newLineBuffer : number[];
   height: number;
   width: number;
+  currentLine: number = 1;
   observers: IObserver[] = [];
 
   constructor(width: number, height: number, cellSize: number) {
+
     this.width = width;
     this.height = height;
+    this.lineBuffer = new Array(width).fill(0);
+    this.newLineBuffer = new Array(width).fill(0);
     this.grid = new Array2D(this.height, this.width, () => 0);
   }
 
   notifyReset() {
     for (const observer of this.observers) {
       observer.onReset();
+    }
+  }
+  notifySet(y:number,x:number,value:number) {
+    for (const observer of this.observers) {
+      observer.onSet(y,x,value);
     }
   }
   subscribe(observer: IObserver): void {
@@ -75,6 +87,39 @@ class CellularAutomata implements IObservable {
     forEach(indicesArray, ({ from, to }) => this.switchPlaces(from, to));
   }
 
+  initialize(){
+    let on = false; 
+    let mid = Math.floor(this.width/2);
+    this.lineBuffer[mid] =CellStates.alive; 
+    this.notifySet(0,mid,1);
+    // for(let x = 0; x < this.width; x++) {
+
+    //   if(on){
+      //     this.lineBuffer[x] =CellStates.alive; 
+      //     // this.grid.set(0,x,CellStates.alive);
+      //     this.notifySet(0,x,1);
+      //   }
+      //   on = !on;
+      // }
+  }
+  nextGenLine(): void {
+    
+    // let prevLine = (this.currentLine -1) % (this.height-1);
+    for(let x = 0; x < this.width; x++){
+      let current = this.lineBuffer[x]
+      let left = (x==0)?  0 : this.lineBuffer[x-1];
+      let right = (x==this.width-1)? 0 : this.lineBuffer[x+1];
+      let value =Rules.rule1(left,current,right); 
+      this.newLineBuffer[x] = value;
+      this.notifySet(this.currentLine,x,value);
+    }
+    this.lineBuffer = [...this.newLineBuffer];
+
+    this.currentLine = (this.currentLine +1) % (this.height);;
+
+    // this.currentLine = 
+  }
+
   down(x: number, y: number): index {
     return { x, y: y + 1 };
   }
@@ -118,6 +163,21 @@ class CellularAutomata implements IObservable {
       }
       str += "\n";
     }
+
+    console.log(str);
+  }
+  formatPrintLine() {
+    let str: string = "";
+      for (let x = 0; x < this.width; x++) {
+        const cell = this.lineBuffer[x];
+        if (cell === CellStates.alive) {
+          str += "o";
+        } else {
+          str += "#";
+        }
+      }
+      str += "\n";
+    
 
     console.log(str);
   }

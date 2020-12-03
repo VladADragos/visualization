@@ -20,6 +20,7 @@ export default class Renderer {
     // this.renderContext.fillStyle = color;
     this.renderWithColor(color, () => {
       const { origin, width, height } = rect;
+      // console.log("Cords x:" + origin.x/16)
       this.renderContext.fillRect(origin.x, origin.y, width, height);
       // this.renderContext.strokeRect(origin.x, origin.y, width, height);
     });

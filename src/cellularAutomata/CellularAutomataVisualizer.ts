@@ -45,31 +45,31 @@ class CellularAutomataVisualizer implements IObserver {
     this.visualArray.get(from.y, from.x).color = Colors.empty;
     this.visualArray.get(to.y, to.x).color = Colors.air;
   }
+  onSet(y:number,x:number,value: number){
+    // let num = 8;
+    // this.visualArray.get(y,num).color = Colors.black;
+    if(value){
+      this.visualArray.get(y,x).color = Colors.air;
+    } else{
+      this.visualArray.get(y,x).color = Colors.empty;
+    }
+  }
 
   getArray2d(): IDrawable[] {
     return this.visualArray.asArray();
   }
 
   generateArray(): void {
-    for (let i = 0; i < this.height; i++) {
-      for (let j = 0; j < this.height; j++) {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
         let rect = new CRect(
-          j * this.cellSize,
-          i * this.cellSize,
+          x * this.cellSize,
+          y * this.cellSize,
           this.cellSize,
           this.cellSize
         );
-        const element = this.cellularAutomata.grid.get(j, i);
-        if (element === CellStates.alive) {
-          if (!this.cellularAutomata.isInAir(i, j)) {
-            rect.color = Colors.air;
-          }
-        } else {
-          rect.color = Colors.empty;
-        }
-        this.visualArray.set(i, j, rect);
-        //this.visualArray[get2dIndexAs1d(i, j, this.width)] = rect;
-        // this.visualArray.push(rect);
+        rect.color = Colors.empty;
+        this.visualArray.set(y,x, rect);
       }
     }
   }

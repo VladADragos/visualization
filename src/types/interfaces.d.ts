@@ -10,6 +10,7 @@ interface IObservable {
   subscribe(observer: IObserver): void;
 }
 interface IObserver {
+  onSet(y:number,x:number,value: number):void;
   onSpawn(spawnLocation: number): void;
   onMove(from: index, to: index): void;
   onReset(): void;
