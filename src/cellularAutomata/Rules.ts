@@ -1,4 +1,8 @@
+import eRules from "./eRules";
 import RuleSets from "./RuleSets";
+
+
+
 
 class Rules{
 
@@ -40,8 +44,14 @@ class Rules{
         }
 
     } 
-    static rule1(left:number,current: number,right:number):number{
-        let ruleSet: number[] = RuleSets.get(130);
+    // static _rules = {
+    //     "30": [0,0,0,1,1,1,1,0],
+    //     "126": [0,1,1,1,1,1,1,0],
+    //     "54": [0,0,1,1,0,1,1,0] 
+    // }
+    static rule1(left:number,current: number,right:number,rule: eRules):number{
+        let r = rule;
+        let ruleSet: number[] = RuleSets[rule];
         let cellState:[number,number,number] = [left,current,right];
         return Rules.matchCellState(cellState,ruleSet);
         // return 1;

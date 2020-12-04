@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import CellularAutomata from "./CellularAutomata";
 import CellularAutomataVisualizer from "./CellularAutomataVisualizer";
 import Canvas from "../canvas/Canvas";
+import eRules from "./eRules";
 
 const CellularAutomataComponent = ({
   width,
   height,
   cellSize,
+  rule,
 }: CellularAutomataComponentProps): JSX.Element =>
 {
   const canvasWidth: number = width * cellSize;
@@ -15,9 +17,10 @@ const CellularAutomataComponent = ({
   const [freeze, setFreeze] = useState(false);
 
   const { current: cellularAutomata } = useRef(
-    new CellularAutomata(width, height, cellSize)
+    new CellularAutomata(width, height, cellSize,rule)
   );
-
+  
+  
   const { current: cellularAutomataVisualizer } = useRef(
     new CellularAutomataVisualizer(cellularAutomata, width, height, cellSize)
   );
@@ -35,7 +38,7 @@ const CellularAutomataComponent = ({
     cellularAutomata.initialize();
     const interval2: NodeJS.Timeout = setInterval(() => {
       if (!freeze) cellularAutomata.nextGenLine();
-    }, 1);
+    }, 40);
 
     // const interval: NodeJS.Timeout = setInterval(() => {
     //   if (!freeze) cellularAutomata.nextGenLine();
@@ -55,11 +58,11 @@ const CellularAutomataComponent = ({
         height={canvasHeight}
         data={cellularAutomataVisualizer.getArray2d()}
       />
-      <Buttons
+      {/* <Buttons
         freeze={freeze}
         setFreeze={setFreeze}
         cellularAutomata={cellularAutomata}
-      />
+      /> */}
     </div>
   );
 };
@@ -93,6 +96,7 @@ interface CellularAutomataComponentProps
   width: number;
   height: number;
   cellSize: number;
+  rule?: eRules
 }
 
 export default CellularAutomataComponent;

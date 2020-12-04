@@ -3,6 +3,7 @@ import { CRect, CShape } from "../shapes/Shapes";
 import Colors from "./Colors";
 import CellStates from "./CellStates";
 import Rules from "./Rules";
+import eRules from "./eRules";
 class CellularAutomata implements IObservable {
   grid: Array2D<number>;
   lineBuffer: number[];
@@ -11,13 +12,15 @@ class CellularAutomata implements IObservable {
   width: number;
   currentLine: number = 1;
   observers: IObserver[] = [];
+  rule: eRules;
 
-  constructor(width: number, height: number, cellSize: number) {
+  constructor(width: number, height: number, cellSize: number,rule:eRules = 30) {
 
     this.width = width;
     this.height = height;
     this.lineBuffer = new Array(width).fill(0);
     this.newLineBuffer = new Array(width).fill(0);
+    this.rule = rule
     this.grid = new Array2D(this.height, this.width, () => 0);
   }
 
@@ -107,9 +110,9 @@ class CellularAutomata implements IObservable {
     // let prevLine = (this.currentLine -1) % (this.height-1);
     for(let x = 0; x < this.width; x++){
       let current = this.lineBuffer[x]
-      let left = (x==0)?  0 : this.lineBuffer[x-1];
-      let right = (x==this.width-1)? 0 : this.lineBuffer[x+1];
-      let value =Rules.rule1(left,current,right); 
+      let left =this.lineBuffer[(x+this.width-1)%this.width];
+      let right = this.lineBuffer[(x+1)%this.width];
+      let value =Rules.rule1(left,current,right,this.rule); 
       this.newLineBuffer[x] = value;
       this.notifySet(this.currentLine,x,value);
     }
