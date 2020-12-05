@@ -31,15 +31,11 @@ const Canvas = ({
     if (debug) console.log("fps " + (step - prevStep));
     const renderer = rendererRef.current;
     if (renderer) {
-      renderer.clear(width, height);
       if (animation !== undefined) {
         animation(step - prevStep, step);
       }
 
       renderer.drawAll(data);
-      // renderer.renderContext.rotate((2 * Math.PI) / 180);
-      // console.log(Img);
-      // renderer.drawSvg(Img, 0, 0);
       prevStep = step;
       return requestAnimationFrame(draw);
     }

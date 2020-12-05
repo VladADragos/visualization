@@ -1,6 +1,6 @@
 enum Colors {
   air = "#9fdae3",
-  ground = "#e3e19f",
+  // ground = "#e3e19f",
   empty = "#ffffff",
   black = "#000000"
 }

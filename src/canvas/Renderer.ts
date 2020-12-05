@@ -7,9 +7,13 @@ export default class Renderer {
   }
 
   drawAll(shapes: IDrawable[]) {
-    for (const shape of shapes) {
-      shape.draw(this);
+    for(let i = 0; i<shapes.length; i++){
+      shapes[i].draw(this);
+
     }
+    // for (const shape of shapes) {
+    //   shape.draw(this);
+    // }
   }
 
   drawText(text: string) {

@@ -20,35 +20,37 @@ const CellularAutomataComponent = ({
     new CellularAutomata(width, height, cellSize,rule)
   );
   
-  
   const { current: cellularAutomataVisualizer } = useRef(
     new CellularAutomataVisualizer(cellularAutomata, width, height, cellSize)
-  );
+    );
+    console.log("init");
+  cellularAutomata.initialize();
 
   // useEffect(() => {
   //   const interval: NodeJS.Timeout = setInterval(() => {
-  //     if (!freeze) cellularAutomata.spawn();
-  //   }, 50);
+  //     cellularAutomata.nextGenLine();
+  //   }, 300);
 
   //   return () => clearInterval(interval);
   // }, [freeze, cellularAutomata]);
 
   // let i = 0;
-  useEffect(() => {
-    cellularAutomata.initialize();
-    const interval2: NodeJS.Timeout = setInterval(() => {
-      if (!freeze) cellularAutomata.nextGenLine();
-    }, 40);
+  // useEffect(() => {
+  //   // cellularAutomata.initialize();
+  //   console.log("herro0");
+  //   const interval2: NodeJS.Timeout = setInterval(() => {
+  //    cellularAutomata.nextGenLine();
+  //   }, 20);
 
-    // const interval: NodeJS.Timeout = setInterval(() => {
-    //   if (!freeze) cellularAutomata.nextGenLine();
-    // }, 300);
+  //   // // const interval: NodeJS.Timeout = setInterval(() => {
+  //   // //   if (!freeze) cellularAutomata.nextGenLine();
+  //   // // }, 300);
 
-    return () => {
-      clearInterval(interval2);
-      // clearInterval(interval2);
-    };
-  }, [freeze, cellularAutomata]);
+  //   return () => 
+  //     clearInterval(interval2);
+  //     // clearInterval(interval2);
+  //   }
+  // }, [cellularAutomata]);
 
   console.log("ca root");
   return (
@@ -57,12 +59,14 @@ const CellularAutomataComponent = ({
         width={canvasWidth}
         height={canvasHeight}
         data={cellularAutomataVisualizer.getArray2d()}
+        animation={()=>cellularAutomata.nextGenLine()}
+        
       />
-      {/* <Buttons
+      <Buttons
         freeze={freeze}
         setFreeze={setFreeze}
         cellularAutomata={cellularAutomata}
-      /> */}
+      />
     </div>
   );
 };
@@ -77,9 +81,9 @@ const Buttons = ({ freeze, setFreeze, cellularAutomata }: ButtonsProps) =>
 {
   return (
     <div className="buttons">
-      {/* <button onClick={() => setFreeze(!freeze)}>
+      <button onClick={() => setFreeze(!freeze)}>
         {freeze ? "play" : "pause"}
-      </button> */}
+      </button>
       <button onClick={() => cellularAutomata.initialize()}>init</button>
       <button onClick={() => cellularAutomata.nextGenLine()}>nextLine</button>
       {/* <button onClick={() => cellularAutomata.spawn()}>spawn</button> */}

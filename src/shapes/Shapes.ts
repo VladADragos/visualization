@@ -22,7 +22,7 @@ class CRect extends CShape implements IRect, IDrawable
 {
   width: number;
   height: number;
-  constructor(x: number, y: number, width: number, height: number, color: string = Colors.ground)
+  constructor(x: number, y: number, width: number, height: number, color: string = Colors.empty)
   {
     super(x, y, color);
     this.width = width;
@@ -43,7 +43,7 @@ class CTriangle extends CShape implements ITriangle, IDrawable
 {
   width: number;
   height: number;
-  constructor(x: number, y: number, width: number, height: number, color: string = Colors.ground)
+  constructor(x: number, y: number, width: number, height: number, color: string = Colors.empty)
   {
     super(x, y, color);
     this.width = width;
@@ -62,7 +62,7 @@ class CTriangle extends CShape implements ITriangle, IDrawable
 class CCircle extends CShape implements ICircle, IDrawable
 {
   radius: number;
-  constructor(x: number, y: number, radius: number, color: string = Colors.ground)
+  constructor(x: number, y: number, radius: number, color: string = Colors.empty)
   {
     super(x, y, color);
     this.radius = radius;
