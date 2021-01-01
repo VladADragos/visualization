@@ -21,13 +21,17 @@ export default class Renderer {
   }
   offset: number = 0;
   drawRect(rect: IRect, color = "#000") {
+    this.renderContext.fillStyle = color;
     // this.renderContext.fillStyle = color;
-    this.renderWithColor(color, () => {
-      const { origin, width, height } = rect;
-      // console.log("Cords x:" + origin.x/16)
-      this.renderContext.fillRect(origin.x, origin.y, width, height);
-      // this.renderContext.strokeRect(origin.x, origin.y, width, height);
-    });
+    // this.renderContext.strokeStyle = color;
+    // const { origin, width, height } = rect;
+    this.renderContext.fillRect(rect.origin.x, rect.origin.y, rect.width, rect.height);
+    // this.renderContext.strokeStyle = this.defaultColor;
+    // this.renderContext.fillStyle = this.defaultColor;
+    // this.renderWithColor(color, () => {
+    //   // console.log("Cords x:" + origin.x/16)
+    //   // this.renderContext.strokeRect(origin.x, origin.y, width, height);
+    // });
 
     // this.renderContext.fillStyle = this.defaultColor;
   }

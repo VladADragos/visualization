@@ -1,5 +1,5 @@
 import Renderer from "../canvas/Renderer";
-import Colors from '../cellularAutomata/Colors';
+import Colors from "../utils/Colors";
 
 abstract class CShape implements IDrawable
 {
