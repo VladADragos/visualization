@@ -1,12 +1,15 @@
 import Renderer from "../canvas/Renderer";
+import Colors from '../cellularAutomata/Colors';
 
 abstract class CShape implements IDrawable
 {
   origin: IVec2 = { x: 0, y: 0 };
-  constructor(x: number, y: number)
+  color: string;
+  constructor(x: number, y: number, color: string)
   {
     this.origin.x = x;
     this.origin.y = y;
+    this.color = color;
   }
   draw(renderer: any): void
   {
@@ -19,11 +22,12 @@ class CRect extends CShape implements IRect, IDrawable
 {
   width: number;
   height: number;
-  constructor(x: number, y: number, width: number, height: number)
+  constructor(x: number, y: number, width: number, height: number, color: string = Colors.empty)
   {
-    super(x, y);
+    super(x, y, color);
     this.width = width;
     this.height = height;
+    this.color = color;
   }
   type(): string
   {
@@ -31,7 +35,7 @@ class CRect extends CShape implements IRect, IDrawable
   }
   draw(renderer: Renderer): void
   {
-    renderer.drawRect(this);
+    renderer.drawRect(this, this.color);
   }
 }
 
@@ -39,9 +43,9 @@ class CTriangle extends CShape implements ITriangle, IDrawable
 {
   width: number;
   height: number;
-  constructor(x: number, y: number, width: number, height: number)
+  constructor(x: number, y: number, width: number, height: number, color: string = Colors.empty)
   {
-    super(x, y);
+    super(x, y, color);
     this.width = width;
     this.height = height;
   }
@@ -58,9 +62,9 @@ class CTriangle extends CShape implements ITriangle, IDrawable
 class CCircle extends CShape implements ICircle, IDrawable
 {
   radius: number;
-  constructor(x: number, y: number, radius: number)
+  constructor(x: number, y: number, radius: number, color: string = Colors.empty)
   {
-    super(x, y);
+    super(x, y, color);
     this.radius = radius;
   }
   type(): string

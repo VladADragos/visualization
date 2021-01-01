@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .App-logo {
@@ -35,4 +37,18 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.cellular-automata{
+  display: flex;
+  flex-direction: column;
+  /* width: 20rem; */
+  /* wi */
+}
+
+.buttons{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+
 }

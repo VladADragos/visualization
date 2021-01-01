@@ -1,27 +1,33 @@
-interface IVec2 {
+interface IVec2
+{
   x: number;
   y: number;
 }
-interface IVec3 {
+interface IVec3
+{
   x: number;
   y: number;
   z: number;
 }
 
-interface IShape {
+interface IShape
+{
   origin: IVec2;
 }
 
-interface IRect extends IShape {
+interface IRect extends IShape
+{
   width: number;
   height: number;
 }
 
-interface ICircle extends IShape {
+interface ICircle extends IShape
+{
   radius: number;
 }
 
-interface ITriangle extends IShape {
+interface ITriangle extends IShape
+{
   width: number;
   height: number;
 }
