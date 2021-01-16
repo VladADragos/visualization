@@ -9,31 +9,72 @@ export default class Renderer {
   drawAll(shapes: IDrawable[]) {
     for(let i = 0; i<shapes.length; i++){
       shapes[i].draw(this);
-
     }
     // for (const shape of shapes) {
     //   shape.draw(this);
     // }
   }
 
+  getColorOnPixel(x:number,y:number): Uint8ClampedArray{
+    // console.log(x,y);
+    return this.renderContext.getImageData(x,y,1,1).data;
+  }
+
   drawText(text: string) {
     this.renderContext.fillText(text, 500, 200);
   }
-  offset: number = 0;
   drawRect(rect: IRect, color = "#000") {
+    // #5b92eb
+    // console.log(color);
     this.renderContext.fillStyle = color;
-    // this.renderContext.fillStyle = color;
-    // this.renderContext.strokeStyle = color;
-    // const { origin, width, height } = rect;
     this.renderContext.fillRect(rect.origin.x, rect.origin.y, rect.width, rect.height);
-    // this.renderContext.strokeStyle = this.defaultColor;
-    // this.renderContext.fillStyle = this.defaultColor;
-    // this.renderWithColor(color, () => {
-    //   // console.log("Cords x:" + origin.x/16)
-    //   // this.renderContext.strokeRect(origin.x, origin.y, width, height);
-    // });
+  }
+  drawRectPath(rect: IRect, color = "#000") {
+    // this.renderContext.fillStyle = '#080808';
+    this.renderContext.strokeStyle = '#002f7a';
+    this.renderContext.beginPath();
 
-    // this.renderContext.fillStyle = this.defaultColor;
+    this.renderContext.moveTo(rect.origin.x,rect.origin.y);
+    this.renderContext.lineTo(rect.origin.x,rect.origin.y+rect.height);
+    this.renderContext.lineTo(rect.origin.x+rect.width,rect.origin.y+rect.height);
+    this.renderContext.lineTo(rect.origin.x+rect.width,rect.origin.y);
+
+
+    this.renderContext.closePath();
+    // this.renderContext.fill();
+    this.renderContext.stroke();
+
+
+  }
+  drawSelectionBox(selected: Set<IRect>){
+    let collection: IRect[] = [];
+
+    selected.forEach((v1,x,y)=> collection.push(v1));
+    let x0 = collection[0].origin.x;
+    let x1 = 0;
+    let y0 = collection[0].origin.y;
+    let y1 = 0;
+    
+    for(let i = 0; i<collection.length; i++){
+      let {origin,width,height} = collection[i];
+      x0 = Math.min(x0,origin.x);
+      y0 = Math.min(y0,origin.y);
+      x1 = Math.max(x1,origin.x+width);
+      y1 = Math.max(y1,origin.y+height);
+    }
+
+    this.renderContext.beginPath();
+    this.renderContext.moveTo(x0,y0);
+    this.renderContext.lineTo(x0,y1);
+    this.renderContext.lineTo(x1,y1);
+    this.renderContext.lineTo(x1,y0);
+    this.renderContext.closePath();
+    this.renderContext.stroke();
+
+
+  
+
+
   }
 
   clear(width: number, height: number): void {

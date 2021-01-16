@@ -4,11 +4,15 @@ import { CShape } from "../shapes/Shapes";
 import Svg from "./Square-symbol.svg";
 
 import { createImg } from "../utils/utils";
+import { render } from "@testing-library/react";
 interface canvasProps {
   width: number;
   height: number;
-  data: IDrawable[];
+  data?: IDrawable[];
+  selected?: Set<IRect>;
   debug?: boolean;
+  getCanvas?:(canvas: HTMLCanvasElement)=>void
+  onClick?: (e:React.MouseEvent<HTMLCanvasElement, MouseEvent>,r:Renderer)=>void;
   animation?: (step: number, time: number) => void;
 }
 
@@ -16,7 +20,10 @@ const Canvas = ({
   width,
   height,
   data,
+  selected,
   debug = false,
+  getCanvas,
+  onClick,
   animation,
 }: canvasProps): JSX.Element => {
   const Img = createImg(Svg);
@@ -31,11 +38,17 @@ const Canvas = ({
     if (debug) console.log("fps " + (step - prevStep));
     const renderer = rendererRef.current;
     if (renderer) {
+      renderer.clear(width,height);
       if (animation !== undefined) {
         animation(step - prevStep, step);
       }
-
-      renderer.drawAll(data);
+      if(selected && selected.size > 0){
+        // renderer.drawPoly([{x:50,y:50},{x:50,y:50+50},{x:50+50,y:50+50},{x:50+50,y:50}]);
+        renderer.drawSelectionBox(selected);
+      }
+      if(data && data.length > 0){
+        renderer.drawAll(data);
+      }
       prevStep = step;
       return requestAnimationFrame(draw);
     }
@@ -45,8 +58,9 @@ const Canvas = ({
   useEffect(() => {
     if (debug) console.log("first render");
     const ctx = canvasRef.current?.getContext("2d");
-
+    
     if (ctx) {
+      getCanvas?.(canvasRef.current as HTMLCanvasElement);
       rendererRef.current = new Renderer(ctx);
     } else {
       console.error("Context was not set");
@@ -68,6 +82,7 @@ const Canvas = ({
   return (
     <>
       <canvas
+        onClick={(e)=>{if(onClick) onClick(e,rendererRef.current as Renderer)}}
         width={width}
         height={height}
         ref={canvasRef}
