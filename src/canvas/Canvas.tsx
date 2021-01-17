@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import Renderer from "./Renderer";
-import { CShape } from "../shapes/Shapes";
+import { CRect, CShape } from "../shapes/Shapes";
 import Svg from "./Square-symbol.svg";
 
 import { createImg } from "../utils/utils";
@@ -8,8 +8,8 @@ import { render } from "@testing-library/react";
 interface canvasProps {
   width: number;
   height: number;
-  data?: IDrawable[];
-  selected?: Set<IRect>;
+  data?: CRect[];
+  selected?: Set<CRect>;
   debug?: boolean;
   getCanvas?:(canvas: HTMLCanvasElement)=>void
   onClick?: (e:React.MouseEvent<HTMLCanvasElement, MouseEvent>,r:Renderer)=>void;
@@ -42,12 +42,15 @@ const Canvas = ({
       if (animation !== undefined) {
         animation(step - prevStep, step);
       }
+
+      if(data && data.length > 0){
+        renderer.drawAll2((data as any));
+        renderer.drawAll(data);
+      }
       if(selected && selected.size > 0){
         // renderer.drawPoly([{x:50,y:50},{x:50,y:50+50},{x:50+50,y:50+50},{x:50+50,y:50}]);
         renderer.drawSelectionBox(selected);
-      }
-      if(data && data.length > 0){
-        renderer.drawAll(data);
+        
       }
       prevStep = step;
       return requestAnimationFrame(draw);

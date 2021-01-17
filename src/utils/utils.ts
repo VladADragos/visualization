@@ -33,4 +33,28 @@ function createImg(path: string): HTMLImageElement {
   return img;
 }
 
-export { forEach, randomInt, get2dIndexAs1d, Array2D, createImg };
+function ByteArraytoHexString(arr: Uint8ClampedArray){
+  let str ="#";
+  for(let i  = 0; i<arr.length-1; i++){
+    let s = arr[i].toString(16);
+    str = s.length ===1? str.concat(("0").concat(s)): str.concat(s);
+  }
+
+  return str;
+}
+
+function getHex(length: number){
+  let num = 0;
+  let digits = 1;
+  return ()=>{
+      let str = "#".concat("0".repeat(length-digits));
+      str += num.toString(16);
+      num += 16;  
+      digits = (num >= (16*(16**(digits-1)))) ? digits+1 : digits;
+    return str; 
+  }
+}
+
+
+
+export { forEach, randomInt, get2dIndexAs1d, Array2D, createImg,getHex,ByteArraytoHexString };

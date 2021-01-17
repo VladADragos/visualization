@@ -1,3 +1,5 @@
+import { CRect } from "../shapes/Shapes";
+
 export default class Renderer {
   renderContext: CanvasRenderingContext2D;
   font: string = "16px serif";
@@ -6,10 +8,31 @@ export default class Renderer {
     this.renderContext = renderContext;
   }
 
-  drawAll(shapes: IDrawable[]) {
+  drawAll(shapes: CRect[]) {
     for(let i = 0; i<shapes.length; i++){
-      shapes[i].draw(this);
+      let {origin,width,height,color}= shapes[i];
+      // console.log(color);
+      
+      this.renderContext.fillStyle = color;
+
+      // console.log(this.renderContext.fillStyle);
+      this.renderContext.fillRect(origin.x,origin.y,width,height);
+
+
     }
+    // this.renderContext.fill();
+    // for (const shape of shapes) {
+    //   shape.draw(this);
+    // }
+  }
+  drawAll2(shapes: IRect[]) {
+    this.renderContext.fillStyle = "#002f7a";
+    for(let i = 0; i<shapes.length; i++){
+      let {origin,width,height}= shapes[i];
+      this.renderContext.rect(origin.x,origin.y,width,height);
+    }
+
+    this.renderContext.fill();
     // for (const shape of shapes) {
     //   shape.draw(this);
     // }
@@ -32,6 +55,7 @@ export default class Renderer {
   drawRectPath(rect: IRect, color = "#000") {
     // this.renderContext.fillStyle = '#080808';
     this.renderContext.strokeStyle = '#002f7a';
+    this.renderContext.lineWidth = 20;
     this.renderContext.beginPath();
 
     this.renderContext.moveTo(rect.origin.x,rect.origin.y);

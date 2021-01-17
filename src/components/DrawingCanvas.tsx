@@ -4,22 +4,23 @@ import Renderer from '../canvas/Renderer';
 import { CRect } from '../shapes/Shapes';
 import * as utils from '../utils/utils';
 
-function toHexString(arr: Uint8ClampedArray){
-    let str ="#";
-    for(let i = 0; i < arr.length-1; i++){
-        str += arr[i].toString(16);
-    }
 
-    return str;
-}
 const DrawingCanvas=():JSX.Element =>{
-    const width: number = 500;
-    const height: number = 200;
-    const shapeBuffer: IDrawable[] = [];
-    const selectedSet: Set<IRect> = new Set();
+    const width: number = 1000;
+    const height: number = 400;
+    const shapeBuffer: CRect[] = [];
+    const selectedSet: Set<CRect> = new Set();
+    const hexGenerator: ()=>string = utils.getHex(6);
     let box:DOMRect;
-    shapeBuffer.push(new CRect(20,20,40,40,'#5b92eb'));
-    shapeBuffer.push(new CRect(80,80,40,40,'#ffaaff'));
+    // shapeBuffer.push(new CRect(20,20,40,40,'#5b92eb'));
+    for(let i = 0;i<19;i++){
+        let c = hexGenerator();
+        console.log(c)
+        shapeBuffer.push(new CRect((52*i),0,50,50,c));
+    }
+    // shapeBuffer.push(new CRect(100,100,100,100,"#000130"))
+    // shapeBuffer.push(new CRect(200,50,40,40,hexGenerator()));
+    // shapeBuffer.push(new CRect(300,100,40,40,hexGenerator()));
     
     
     function getLocalCords(x1:number,y1:number): IVec2{
@@ -27,27 +28,26 @@ const DrawingCanvas=():JSX.Element =>{
     }
     function handleOnClick(e:React.MouseEvent<HTMLCanvasElement, MouseEvent>,r:Renderer){
         let {x,y} = getLocalCords(e.clientX,e.clientY);
-        console.log(x,y);
-        let color = toHexString(r.getColorOnPixel(x,y));
-        utils.forEach(shapeBuffer,(element)=>{
+        // console.log(x,y);
+        let color = utils.ByteArraytoHexString(r.getColorOnPixel(x,y));
+        // utils.forEach(shapeBuffer,(element)=>{
             
-            let asCRect = element as CRect;
-            // console.log(asCRect.color );
-            console.log("before comp");
-            if (asCRect.color === color){
-                console.log("found ",asCRect);
-                if(!selectedSet.has(asCRect)){
-                    selectedSet.add(asCRect);
-                    console.log(selectedSet);
-                    console.assert(selectedSet.has(asCRect));
-                }else{
-                    console.log("deleted ",asCRect);
-                    selectedSet.delete(asCRect);
-                }
-                return;
+        //     let asCRect = element as CRect;
+        //     // console.log(asCRect.color );
+        //     if (asCRect.color === color){
+        //         console.log("found ",asCRect);
+        //         if(!selectedSet.has(asCRect)){
+        //             selectedSet.add(asCRect);
+        //             console.log(selectedSet);
+        //             console.assert(selectedSet.has(asCRect));
+        //         }else{
+        //             console.log("deleted ",asCRect);
+        //             selectedSet.delete(asCRect);
+        //         }
+        //         return;
                 
-            }
-        })
+        //     }
+        // })
         console.log(color);
     }
 
