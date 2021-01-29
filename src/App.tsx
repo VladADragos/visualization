@@ -1,9 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css"
-import DrawingCanvas from "./components/DrawingCanvas";
-const App = (): JSX.Element => {
+import Canvas from "./canvas/Canvas";
 
 
+// asyncfunction test()
+// {
+//   const a = await fetch("./App.css");
+//   console.log(a);
+
+// }
+const App = (): JSX.Element =>
+{
+
+  // test();
 
 
 
@@ -13,7 +22,7 @@ const App = (): JSX.Element => {
 
   return (
     <div className="App">
-      <DrawingCanvas/>
+      <Canvas width={1000} height={600} />
     </div>
   );
 };
