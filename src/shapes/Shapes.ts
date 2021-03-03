@@ -35,7 +35,7 @@ class CRect extends CShape implements IRect, IDrawable
   }
   draw(renderer: Renderer): void
   {
-    renderer.drawRect(this, this.color);
+    // renderer.drawRect(this, this.color);
   }
 }
 
@@ -55,7 +55,7 @@ class CTriangle extends CShape implements ITriangle, IDrawable
   }
   draw(renderer: Renderer): void
   {
-    renderer.drawTriangle(this);
+    // renderer.drawTriangle(this);
   }
 }
 
@@ -73,7 +73,7 @@ class CCircle extends CShape implements ICircle, IDrawable
   }
   draw(renderer: Renderer): void
   {
-    renderer.drawCircle(this);
+    // renderer.drawCircle(this);
   }
 }
 

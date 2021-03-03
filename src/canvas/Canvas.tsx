@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import Renderer from "./Renderer";
 import { CRect } from "../shapes/Shapes";
-import WebglContext from './WebglContext';
-import { runInContext } from "vm";
+import WebGLContextProvider from './WebGLContextProvider';
+import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "./Core";
 interface canvasProps
 {
   width: number;
@@ -57,16 +57,39 @@ const Canvas = ({
   //   return 0;
   // }
 
-  async function run(c: WebglContext)
+  async function run(c: WebGLContextProvider, offset: number)
   {
 
-    await c.addVertex("./shaders/vertex.glsl");
-    await c.addFrag("./shaders/frag.glsl");
-    c.link();
-    c.addBuffer();
-    c.use();
-    c.gl.drawArrays(c.gl.TRIANGLES, 0, 3);
+    WebGLContextProvider.setInstance(c.gl);
+    WebGLContextProvider.getInstance().clear(WebGLContextProvider.getInstance().COLOR_BUFFER_BIT);
+    const program = new Program();
+    //shaders
+    const vert = new Shader(program, ShaderType.VERTEX);
+    await vert.bind("./shaders/vertex.glsl");
+    const frag = new Shader(program, ShaderType.FRAGMENT);
+    await frag.bind("./shaders/frag.glsl");
+
+    program.link();
+
+    const data = [
+      -0.5 + offset, -0.5 + offset,
+      0.5 + offset, -0.5 + offset,
+      0.5 + offset, 0.5 + offset,
+      -0.5 + offset, 0.5 + offset,
+    ];
+    const indexArray = [0, 1, 2, 2, 3, 0];
+
+    const vbo = new VertexBuffer(data, 1);
+
+    const ibo = new IndexBuffer(indexArray, 6);
+    program.use();
+    WebGLContextProvider.getInstance().drawElements(c.gl.TRIANGLES, ibo.getCount(), c.gl.UNSIGNED_INT, 0);
+
+
+
   }
+
+
   useEffect(() =>
   {
     if (debug) console.log("first render");
@@ -74,8 +97,15 @@ const Canvas = ({
     const webgl = canvasRef.current?.getContext("webgl2");
     if (webgl) {
       // assert(true);
-      const c = new WebglContext(webgl);
-      run(c);
+      const c = new WebGLContextProvider(webgl);
+      webgl.viewport(0, 0, webgl.drawingBufferWidth, webgl.drawingBufferHeight);
+      webgl.clearColor(0.0, 0.8, 0.5, 1.0);
+      webgl.clear(webgl.COLOR_BUFFER_BIT)
+      run(c, -0.5);
+      run(c, 0.0);
+      run(c, 0.5);
+
+      // run(c, 0.3);
 
 
       // c.cleanup();

@@ -1,7 +1,7 @@
 import { getFileContents } from "../utils/utils";
 
 
-class WebGLContext
+class WebGLContextProvider
 {
     gl: WebGL2RenderingContext;
     program: Nullable<WebGLProgram>;
@@ -13,11 +13,12 @@ class WebGLContext
     private static glContext: WebGL2RenderingContext;
     static getInstance()
     {
-        return WebGLContext.glContext;
+        if (!WebGLContextProvider.glContext) throw new Error("valid webgl context is not set");
+        return WebGLContextProvider.glContext;
     }
     static setInstance(ctx: WebGL2RenderingContext)
     {
-        return WebGLContext.glContext = ctx;
+        return WebGLContextProvider.glContext = ctx;
     }
 
     getProgram(): Nullable<WebGLProgram>
@@ -64,7 +65,7 @@ class WebGLContext
     {
         if (this.program) {
 
-            const a = this.gl.getAttribLocation(this.program, "a_position");
+            // const a = this.gl.getAttribLocation(this.program, "a_position");
         }
     }
     use()
@@ -157,20 +158,33 @@ class WebGLContext
             this.buffer = buffer;
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
             const positions =
-                [0, 0,
-                    0, 0.5,
-                    0.7, 0
+                [-0.5, -0.5,
+                    0.5, -0.5,
+                    0.5, 0.5,
+                -0.5, 0.5,
+
                 ];
+            const indices = [0, 1, 2, 2, 3, 0];
             this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(positions), this.gl.STATIC_DRAW);
-            const vao = this.gl.createVertexArray();
-            this.gl.bindVertexArray(vao);
+            // const vao = this.gl.createVertexArray();
+            // this.gl.bindVertexArray(vao);
             this.gl.enableVertexAttribArray(this.positionAttributeLocation);
             this.gl.vertexAttribPointer(this.positionAttributeLocation, 2, this.gl.FLOAT, false, 0, 0);
+
+            const ibo = this.gl.createBuffer();
+            this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, ibo);
+            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Int32Array(indices), this.gl.STATIC_DRAW);
         }
     }
 
+    addVertexArrayObject()
+    {
+        // const vao: Nullable<WebGLVertexArrayObject> = this.gl.createVertexArray();
+    }
+    removeVertexArrayObject()
+    {
 
-
+    }
 
     // // Set the clear color to darkish green.
 
@@ -184,4 +198,5 @@ class WebGLContext
 
 
 
-export default WebGLContext;
+
+export default WebGLContextProvider;

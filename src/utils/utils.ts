@@ -1,6 +1,6 @@
 import Array2D from "./Array2D";
 
-function forEach<T>(array: T[], fn: (arg: T, index?: number) => void): void
+function forEach<T>(array: T[], fn: (arg: T, index: number) => void): void
 {
   for (let i = 0; i < array.length; i++) {
     fn(array[i], i);

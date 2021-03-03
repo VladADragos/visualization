@@ -2,7 +2,9 @@ class Array2D<T> {
   array: T[];
   width: number;
   height: number;
+  initializer: ()=>T;
   constructor(height: number, width: number, initializer: () => T) {
+    this.initializer = initializer;
     this.width = width;
     this.height = height;
     this.array = new Array<T>(this.width * this.height);
@@ -19,16 +21,24 @@ class Array2D<T> {
   asArray(): T[] {
     return this.array;
   }
-  forEach(f: (element: T) => void) {
+  forEach(f: (element: T,index:number) => void) {
     for (let i = 0; i < this.array.length; i++) {
-      f(this.array[i]);
+      f(this.array[i],i);
     }
   }
-
+  clear(){
+    for (let i = 0; i < this.array.length; i++) {
+      this.array[i] = this.initializer();
+    }
+  }
   translateIndex(y: number, x: number): number {
     return x + y * this.width;
   }
-
+  copy():Array2D<T>{
+    const arr = new Array2D(this.height,this.width,()=>this.initializer());
+    this.forEach((e,index)=>arr.array[index] = e);
+    return arr; 
+  }
   print() {
     let str: string = "";
 
