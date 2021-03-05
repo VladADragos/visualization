@@ -1,83 +1,113 @@
 import Array2d from './Array2D';
 import { forEach } from './utils';
 import Array2D from './Array2D';
-import { throws } from 'assert';
 class Matrix4x4
 {
-    array: Array2d<number> = new Array2d<number>(4, 4, () => 0);
-    constructor(){
-    }
+    // array: Array2d<number> = new Array2d<number>(4, 4, () => 0);
+    array: Float32Array = new Float32Array(16);
 
-    fill(col0:Vec4,col1:Vec4,col2:Vec4,col3:Vec4){
-        this.array.set(0,0,col0.array[0]);
-        this.array.set(0,1,col0.array[1]);
-        this.array.set(0,2,col0.array[2]);
-        this.array.set(0,3,col0.array[3]);
+    // fill(col0:Vec4,col1:Vec4,col2:Vec4,col3:Vec4){
+    //     this.array.set(0,0,col0.array[0]);
+    //     this.array.set(1,0,col0.array[1]);
+    //     this.array.set(2,0,col0.array[2]);
+    //     this.array.set(3,0,col0.array[3]);
 
-        this.array.set(1,0,col0.array[0]);
-        this.array.set(1,1,col0.array[1]);
-        this.array.set(1,2,col0.array[2]);
-        this.array.set(1,3,col0.array[3]);
+    //     this.array.set(0,1,col0.array[0]);
+    //     this.array.set(1,1,col0.array[1]);
+    //     this.array.set(2,1,col0.array[2]);
+    //     this.array.set(3,1,col0.array[3]);
 
-        this.array.set(2,0,col0.array[0]);
-        this.array.set(2,1,col0.array[1]);
-        this.array.set(2,2,col0.array[2]);
-        this.array.set(2,3,col0.array[3]);
+    //     this.array.set(0,2,col0.array[0]);
+    //     this.array.set(1,2,col0.array[1]);
+    //     this.array.set(2,2,col0.array[2]);
+    //     this.array.set(3,2,col0.array[3]);
 
-        this.array.set(3,0,col0.array[0]);
-        this.array.set(3,1,col0.array[1]);
-        this.array.set(3,2,col0.array[2]);
-        this.array.set(3,3,col0.array[3]);
+    //     this.array.set(0,3,col0.array[0]);
+    //     this.array.set(1,3,col0.array[1]);
+    //     this.array.set(2,3,col0.array[2]);
+    //     this.array.set(3,3,col0.array[3]);
 
    
-        return this;
-    }
-    getAsArray(): number[]
-    {
-        return this.array.asArray();
-    }
+    //     return this;
+    // }
+    static ortho(right:number,left:number,top:number,bottom:number,far:number,near:number):Matrix4x4{
 
-    // scalar x matrix
-    scale(scalar: number)
-    {
-        const array = this.array.asArray();
-        forEach(array, (number, index) => { array[index] = number * scalar });
-    }
+        let matrix = new Matrix4x4();
 
-    identity()
-    {
-        this.array.set(0, 0, 1);
-        this.array.set(1, 1, 1);
-        this.array.set(2, 2, 1);
-        this.array.set(3, 3, 1);
-    }
+        let out = matrix.array;
 
-    multiply(otherMatrix: Matrix4x4){
-        const time = console.time("test");
-        let a = 0;
-        let arr2: Array2D<number> = this.array.copy();
-        for(let k = 0; k<4;k++){
-            for(let i = 0; i<4;i++){
-                for(let j = 0; j<4;j++){
-                    a += arr2.get(i,j)*otherMatrix.array.get(j,i);
-                } 
-                this.array.set(k,i,a);
-                a=0;
-            }
-        }
-        console.timeEnd("test");
-        return this;
-    }
+        let lr = 1 / (left - right);
+        let bt = 1 / (bottom - top);
+        let nf = 1 / (near - far);
+        out[0] = -2 * lr;
+        out[1] = 0;
+        out[2] = 0;
+        out[3] = 0;
+        out[4] = 0;
+        out[5] = -2 * bt;
+        out[6] = 0;
+        out[7] = 0;
+        out[8] = 0;
+        out[9] = 0;
+        out[10] = 2 * nf;
+        out[11] = 0;
+        out[12] = (left + right) * lr;
+        out[13] = (top + bottom) * bt;
+        out[14] = (far + near) * nf;
+        out[15] = 1;
 
-    multiplyVec(vector: Vec4){
 
-    }
-
-    copy():Matrix4x4{
-        const matrix = new Matrix4x4();
-        matrix.array = this.array.copy();
+        // const col0 = new Vec4(2/(right-left),0,0,0);
+        // const col1 = new Vec4(0,2/(top-bottom),0,0);
+        // const col2 = new Vec4(0,0,-2/(far-near),0);
+        // const col3 = new Vec4(-((right+left)/(right-left)),-((top+bottom)/(top-bottom)),-((far+near)/(far-near)),1);
+        // matrix.fill(col0,col1,col2,col3);
         return matrix;
     }
+    // getAsArray(): number[]
+    // {
+    //     return this.array.asArray();
+    // }
+
+    // scalar x matrix
+    // scale(scalar: number)
+    // {
+    //     const array = this.array.asArray();
+    //     forEach(array, (number, index) => { array[index] = number * scalar });
+    // }
+
+    // identity()
+    // {
+    //     this.array.set(0, 0, 1);
+    //     this.array.set(1, 1, 1);
+    //     this.array.set(2, 2, 1);
+    //     this.array.set(3, 3, 1);
+    // }
+
+    // multiply(otherMatrix: Matrix4x4){
+    //     let a = 0;
+    //     let arr2: Array2D<number> = this.array.copy();
+    //     for(let k = 0; k<4;k++){
+    //         for(let i = 0; i<4;i++){
+    //             for(let j = 0; j<4;j++){
+    //                 a += arr2.get(i,j)*otherMatrix.array.get(j,i);
+    //             } 
+    //             this.array.set(k,i,a);
+    //             a=0;
+    //         }
+    //     }
+    //     return this;
+    // }
+
+    // multiplyVec(vector: Vec4){
+
+    // }
+
+    // copy():Matrix4x4{
+    //     const matrix = new Matrix4x4();
+    //     matrix.array = this.array.copy();
+    //     return matrix;
+    // }
     // Add
 
 }
@@ -86,8 +116,6 @@ class Matrix4x4
 class Matrix3x3
 {
     array: Array2d<number> = new Array2d<number>(3, 3, () => 0);
-    constructor(){
-    }
 
     fill(col0:Vec3,col1:Vec3,col2:Vec3,col3:Vec3){
         this.array.set(0,0,col0.array[0]);
@@ -127,7 +155,6 @@ class Matrix3x3
     }
 
     multiply(otherMatrix: Matrix3x3){
-        const time = console.time("test");
         let a = 0;
         let arr2: Array2D<number> = this.array.copy();
         for(let k = 0; k<3;k++){
@@ -139,7 +166,6 @@ class Matrix3x3
                 a=0;
             }
         }
-        console.timeEnd("test");
         return this;
     }
 
@@ -152,8 +178,6 @@ class Matrix3x3
         matrix.array = this.array.copy();
         return matrix;
     }
-    // Add
-
 }
 
 
@@ -218,4 +242,4 @@ class Vec4{
 }
 
 
-export {Matrix4x4,Vec4};
+export {Matrix4x4,Matrix3x3,Vec4,Vec3,Vec2};

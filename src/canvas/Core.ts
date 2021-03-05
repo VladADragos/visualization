@@ -1,3 +1,4 @@
+import { Matrix4x4 } from '../utils/Math';
 import { getFileContents } from '../utils/utils';
 import WebGLContextProvider from './WebGLContextProvider';
 class VertexBuffer
@@ -63,6 +64,11 @@ class IndexBuffer
     }
 }
 
+enum ShaderType
+{
+    VERTEX,
+    FRAGMENT
+}
 class Shader
 {
     gl: WebGL2RenderingContext;
@@ -93,7 +99,13 @@ class Shader
             //console.log("error removing vert shader");
         }
     }
-
+    
+    setUniform4f(name:string,arr:[number,number,number,number]){
+        this.gl.uniform4fv(this.gl.getUniformLocation(this.program.program,name),arr);
+    }
+    setUniformMat4f(name:string,matrix:Iterable<number>){
+        this.gl.uniformMatrix4fv(this.gl.getUniformLocation(this.program.program,name),false,matrix);
+    }
     private createShader(shaderContent: string)
     {
         if (this.shader && this.program) {
@@ -113,11 +125,7 @@ class Shader
     }
 }
 
-enum ShaderType
-{
-    VERTEX,
-    FRAGMENT
-}
+
 class Program
 {
     gl: WebGL2RenderingContext;

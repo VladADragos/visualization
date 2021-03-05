@@ -3,6 +3,8 @@ import Renderer from "./Renderer";
 import { CRect } from "../shapes/Shapes";
 import WebGLContextProvider from './WebGLContextProvider';
 import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "./Core";
+import { Matrix4x4 } from "../utils/Math";
+import { mat4 } from "gl-matrix";
 interface canvasProps
 {
   width: number;
@@ -57,34 +59,65 @@ const Canvas = ({
   //   return 0;
   // }
 
-  async function run(c: WebGLContextProvider, offset: number)
+  function ortho(out:Float32Array, left:number, right:number, bottom:number, top:number, near:number, far:number) {
+    let lr = 1 / (left - right);
+    let bt = 1 / (bottom - top);
+    let nf = 1 / (near - far);
+    out[0] = -2 * lr;
+    out[1] = 0;
+    out[2] = 0;
+    out[3] = 0;
+    out[4] = 0;
+    out[5] = -2 * bt;
+    out[6] = 0;
+    out[7] = 0;
+    out[8] = 0;
+    out[9] = 0;
+    out[10] = 2 * nf;
+    out[11] = 0;
+    out[12] = (left + right) * lr;
+    out[13] = (top + bottom) * bt;
+    out[14] = (far + near) * nf;
+    out[15] = 1;
+    // return out;
+  }
+
+  async function run(offset: number)
   {
 
-    WebGLContextProvider.setInstance(c.gl);
     WebGLContextProvider.getInstance().clear(WebGLContextProvider.getInstance().COLOR_BUFFER_BIT);
     const program = new Program();
     //shaders
+    const proj:Float32Array = Matrix4x4.ortho(0,width,0,height,-1,1).array;
+    // const proj = new Float32Array(16);
+    // ortho(proj,0,width,0,height,-1,1);
+    // mat4.ortho(proj,0,width,0,height,-1,1);
     const vert = new Shader(program, ShaderType.VERTEX);
-    await vert.bind("./shaders/vertex.glsl");
     const frag = new Shader(program, ShaderType.FRAGMENT);
+    
+    await vert.bind("./shaders/vertex.glsl");
     await frag.bind("./shaders/frag.glsl");
-
     program.link();
-
+    
+    
     const data = [
-      -0.5 + offset, -0.5 + offset,
-      0.5 + offset, -0.5 + offset,
-      0.5 + offset, 0.5 + offset,
-      -0.5 + offset, 0.5 + offset,
+      -20, -20,
+       200, -20,
+       200, 200,
+      -20, 200,
     ];
     const indexArray = [0, 1, 2, 2, 3, 0];
-
+    
     const vbo = new VertexBuffer(data, 1);
-
+    
     const ibo = new IndexBuffer(indexArray, 6);
     program.use();
-    WebGLContextProvider.getInstance().drawElements(c.gl.TRIANGLES, ibo.getCount(), c.gl.UNSIGNED_INT, 0);
-
+    frag.setUniform4f("inColor",[1,0,0,1]);
+    // console.log(proj.length);
+    frag.setUniformMat4f("m_proj",proj);
+    const instance = WebGLContextProvider.getInstance(); 
+    instance.drawElements(instance.TRIANGLES, ibo.getCount(), instance.UNSIGNED_INT, 0);
+    
 
 
   }
@@ -97,13 +130,12 @@ const Canvas = ({
     const webgl = canvasRef.current?.getContext("webgl2");
     if (webgl) {
       // assert(true);
-      const c = new WebGLContextProvider(webgl);
       webgl.viewport(0, 0, webgl.drawingBufferWidth, webgl.drawingBufferHeight);
       webgl.clearColor(0.0, 0.8, 0.5, 1.0);
-      webgl.clear(webgl.COLOR_BUFFER_BIT)
-      run(c, -0.5);
-      run(c, 0.0);
-      run(c, 0.5);
+      webgl.clear(webgl.COLOR_BUFFER_BIT);
+      WebGLContextProvider.setInstance(webgl);
+      run(0);
+      
 
       // run(c, 0.3);
 
