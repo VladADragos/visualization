@@ -71,6 +71,26 @@ function getHex(length: number)
   }
 }
 
+function assert(a:boolean,msg:string){
+  if(!a){
+    throw new Error(msg);
+  }
+}
+
+function arrayCompare<T>(array1:T[] | Float32Array,array2:T[]| Float32Array):boolean{
+  console.log(array1.length);
+  console.log(array2.length);
+  assert(array1.length === array2.length,"array not same length");
+  for(let i = 0; i<array1.length;i++){
+    if(array1[i] !== array2[i]){
+      console.log(`index: ${i} ${array1[i]} !== ${array2[i]} `)
+      return false;
+    }
+  }
+
+  return true;
+}
 
 
-export { forEach, randomInt, get2dIndexAs1d, Array2D, createImg, getHex, ByteArraytoHexString, getFileContents, initializeWith };
+
+export {arrayCompare, forEach, randomInt, get2dIndexAs1d, Array2D, createImg, getHex, ByteArraytoHexString, getFileContents, initializeWith };

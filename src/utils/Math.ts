@@ -30,10 +30,11 @@ class Matrix4x4
    
     //     return this;
     // }
-    static ortho(right:number,left:number,top:number,bottom:number,far:number,near:number):Matrix4x4{
+    
+    static ortho(left:number, right:number, bottom:number, top:number, near:number, far:number):Matrix4x4{
 
         let matrix = new Matrix4x4();
-
+        matrix.array = new Float32Array(16);
         let out = matrix.array;
 
         let lr = 1 / (left - right);

@@ -4,7 +4,7 @@ import { CRect } from "../shapes/Shapes";
 import WebGLContextProvider from './WebGLContextProvider';
 import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "./Core";
 import { Matrix4x4 } from "../utils/Math";
-import { mat4 } from "gl-matrix";
+
 interface canvasProps
 {
   width: number;
@@ -59,65 +59,63 @@ const Canvas = ({
   //   return 0;
   // }
 
-  function ortho(out:Float32Array, left:number, right:number, bottom:number, top:number, near:number, far:number) {
-    let lr = 1 / (left - right);
-    let bt = 1 / (bottom - top);
-    let nf = 1 / (near - far);
-    out[0] = -2 * lr;
-    out[1] = 0;
-    out[2] = 0;
-    out[3] = 0;
-    out[4] = 0;
-    out[5] = -2 * bt;
-    out[6] = 0;
-    out[7] = 0;
-    out[8] = 0;
-    out[9] = 0;
-    out[10] = 2 * nf;
-    out[11] = 0;
-    out[12] = (left + right) * lr;
-    out[13] = (top + bottom) * bt;
-    out[14] = (far + near) * nf;
-    out[15] = 1;
-    // return out;
+
+  let off = 0;
+  let diff = 5;
+  function draw(step: number): number
+  {
+
+    run(off);
+    off += diff;
+    if ((off + 350) >= width || off <= 0) {
+      diff *= -1;
+    }
+
+    return requestAnimationFrame(draw);
+  }
+  function rect(x0: number, y0: number, dx: number, dy: number): number[]
+  {
+    let arr = [
+      x0, y0,
+      x0 + dx, y0,
+      x0 + dx, y0 + dy,
+      x0, y0 + dy
+
+    ];
+    // [0, 1, 2, 2, 3, 0];
+
+
+    return arr;
   }
 
   async function run(offset: number)
   {
 
-    WebGLContextProvider.getInstance().clear(WebGLContextProvider.getInstance().COLOR_BUFFER_BIT);
     const program = new Program();
     //shaders
-    const proj:Float32Array = Matrix4x4.ortho(0,width,0,height,-1,1).array;
-    // const proj = new Float32Array(16);
-    // ortho(proj,0,width,0,height,-1,1);
-    // mat4.ortho(proj,0,width,0,height,-1,1);
+    const proj: Float32Array = Matrix4x4.ortho(0, width, 0, height, -1, 1).array;
     const vert = new Shader(program, ShaderType.VERTEX);
     const frag = new Shader(program, ShaderType.FRAGMENT);
-    
+
     await vert.bind("./shaders/vertex.glsl");
     await frag.bind("./shaders/frag.glsl");
     program.link();
-    
-    
-    const data = [
-      -20, -20,
-       200, -20,
-       200, 200,
-      -20, 200,
-    ];
+
+
+    const data = rect(0 + offset, 100, 350, 250);
+
     const indexArray = [0, 1, 2, 2, 3, 0];
-    
+
     const vbo = new VertexBuffer(data, 1);
-    
+
     const ibo = new IndexBuffer(indexArray, 6);
     program.use();
-    frag.setUniform4f("inColor",[1,0,0,1]);
+    frag.setUniform4f("inColor", [1, 0, 0, 1]);
     // console.log(proj.length);
-    frag.setUniformMat4f("m_proj",proj);
-    const instance = WebGLContextProvider.getInstance(); 
+    frag.setUniformMat4f("m_proj", proj);
+    const instance = WebGLContextProvider.getInstance();
     instance.drawElements(instance.TRIANGLES, ibo.getCount(), instance.UNSIGNED_INT, 0);
-    
+
 
 
   }
@@ -134,8 +132,9 @@ const Canvas = ({
       webgl.clearColor(0.0, 0.8, 0.5, 1.0);
       webgl.clear(webgl.COLOR_BUFFER_BIT);
       WebGLContextProvider.setInstance(webgl);
-      run(0);
-      
+
+
+
 
       // run(c, 0.3);
 
@@ -155,9 +154,9 @@ const Canvas = ({
 
   useEffect(() =>
   {
-    // const handle = draw(0);
+    const handle = draw(0);
     if (debug) console.log("canvas drawn");
-    // return () => cancelAnimationFrame(handle);
+    return () => cancelAnimationFrame(handle);
   });
 
 
