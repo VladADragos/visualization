@@ -1,6 +1,9 @@
 import { Matrix4x4 } from '../utils/Math';
 import { getFileContents } from '../utils/utils';
 import WebGLContextProvider from './WebGLContextProvider';
+import fragShader from './fragShader';
+import vertexShader from './vertexShader';
+
 class VertexBuffer
 {
     gl: WebGL2RenderingContext;
@@ -74,19 +77,22 @@ class Shader
     gl: WebGL2RenderingContext;
     program: Program;
     shader: Nullable<WebGLShader>;
+    shaderType: ShaderType;
     constructor(program: Program, type: ShaderType)
     {
         this.gl = WebGLContextProvider.getInstance();
         this.program = program;
+        this.shaderType = type;
         const shaderType = type === ShaderType.FRAGMENT ? this.gl.FRAGMENT_SHADER : this.gl.VERTEX_SHADER;
+        // const shaderContent = type === ShaderType.FRAGMENT ? fragShader: vertexShader;
         this.shader = this.gl.createShader(shaderType);
     }
 
 
-    async bind(shaderPath: string)
+    bind()
     {
 
-        const shaderContent = await getFileContents(shaderPath);
+        const shaderContent = this.shaderType === ShaderType.FRAGMENT ? fragShader : vertexShader;
         this.createShader(shaderContent);
     }
 
@@ -99,12 +105,14 @@ class Shader
             //console.log("error removing vert shader");
         }
     }
-    
-    setUniform4f(name:string,arr:[number,number,number,number]){
-        this.gl.uniform4fv(this.gl.getUniformLocation(this.program.program,name),arr);
+
+    setUniform4f(name: string, arr: [number, number, number, number])
+    {
+        this.gl.uniform4fv(this.gl.getUniformLocation(this.program.program, name), arr);
     }
-    setUniformMat4f(name:string,matrix:Iterable<number>){
-        this.gl.uniformMatrix4fv(this.gl.getUniformLocation(this.program.program,name),false,matrix);
+    setUniformMat4f(name: string, matrix: Iterable<number>)
+    {
+        this.gl.uniformMatrix4fv(this.gl.getUniformLocation(this.program.program, name), false, matrix);
     }
     private createShader(shaderContent: string)
     {

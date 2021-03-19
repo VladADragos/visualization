@@ -58,16 +58,18 @@ const Canvas = ({
   //   }
   //   return 0;
   // }
-
+  let renderer: Nullable<Renderer>;
 
   let off = 0;
-  let diff = 5;
+  let diff = 10;
   function draw(step: number): number
   {
 
-    run(off);
+    run(off, 100);
+    run(off, 0);
+    run(off, -100);
     off += diff;
-    if ((off + 350) >= width || off <= 0) {
+    if ((off + 20) >= width || off <= 0) {
       diff *= -1;
     }
 
@@ -88,33 +90,50 @@ const Canvas = ({
     return arr;
   }
 
-  async function run(offset: number)
+  function run(offset: number, y: number)
   {
+    if (renderer) {
 
-    const program = new Program();
-    //shaders
-    const proj: Float32Array = Matrix4x4.ortho(0, width, 0, height, -1, 1).array;
-    const vert = new Shader(program, ShaderType.VERTEX);
-    const frag = new Shader(program, ShaderType.FRAGMENT);
-
-    await vert.bind("./shaders/vertex.glsl");
-    await frag.bind("./shaders/frag.glsl");
-    program.link();
+      renderer.drawRect(0 + offset, 100 + y, 20, 20);
 
 
-    const data = rect(0 + offset, 100, 350, 250);
+      // renderer.beginRender();
+      // renderer.addRect(0 + offset, 100 + y, 20, 20);
+      // renderer.endRender();
+      // console.log(renderer.fragShader);
+      // renderer.addRect(0 + offset, 100, 200, 200);
+      // renderer.program.use();
+      // renderer.fragShader.setUniform4f("inColor", renderer.drawColor);
+      // renderer.fragShader.setUniformMat4f("m_proj", renderer.projection.asArray());
+      // renderer.webgl.drawElements(renderer.webgl.TRIANGLES, renderer.ibo.getCount(), renderer.webgl.UNSIGNED_INT, 0);
+      // renderer.f();
+    }
 
-    const indexArray = [0, 1, 2, 2, 3, 0];
 
-    const vbo = new VertexBuffer(data, 1);
+    // const program = new Program();
+    // //shaders
+    // const proj: Float32Array = (new Matrix4x4()).ortho(0, width, 0, height, -1, 1).asArray();
+    // const vert = new Shader(program, ShaderType.VERTEX);
+    // const frag = new Shader(program, ShaderType.FRAGMENT);
 
-    const ibo = new IndexBuffer(indexArray, 6);
-    program.use();
-    frag.setUniform4f("inColor", [1, 0, 0, 1]);
-    // console.log(proj.length);
-    frag.setUniformMat4f("m_proj", proj);
-    const instance = WebGLContextProvider.getInstance();
-    instance.drawElements(instance.TRIANGLES, ibo.getCount(), instance.UNSIGNED_INT, 0);
+    // await vert.bind("./shaders/vertex.glsl");
+    // await frag.bind("./shaders/frag.glsl");
+    // program.link();
+
+
+    // const data = rect(0 + offset, 100, 350, 250);
+
+    // const indexArray = [0, 1, 2, 2, 3, 0];
+
+    // const vbo = new VertexBuffer(data, 1);
+
+    // const ibo = new IndexBuffer(indexArray, 6);
+    // program.use();
+    // frag.setUniform4f("inColor", [1, 0, 0, 1]);
+    // // console.log(proj.length);
+    // frag.setUniformMat4f("m_proj", proj);
+    // const instance = WebGLContextProvider.getInstance();
+    // instance.drawElements(instance.TRIANGLES, ibo.getCount(), instance.UNSIGNED_INT, 0);
 
 
 
@@ -132,6 +151,10 @@ const Canvas = ({
       webgl.clearColor(0.0, 0.8, 0.5, 1.0);
       webgl.clear(webgl.COLOR_BUFFER_BIT);
       WebGLContextProvider.setInstance(webgl);
+      renderer = new Renderer(width, height);
+      renderer.program = new Program();
+      // renderer.addShaders();
+
 
 
 
@@ -156,7 +179,7 @@ const Canvas = ({
   {
     const handle = draw(0);
     if (debug) console.log("canvas drawn");
-    return () => cancelAnimationFrame(handle);
+    // return () => cancelAnimationFrame(handle);
   });
 
 
