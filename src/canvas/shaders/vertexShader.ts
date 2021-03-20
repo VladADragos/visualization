@@ -1,5 +1,4 @@
-const vertexShader =
-    `#version 300 es
+const vertexShader =`#version 300 es
  
 // an attribute is an input (in) to a vertex shader.
 // It will receive data from a buffer
@@ -11,6 +10,4 @@ void main() {
   // gl_Position is a special variable a vertex shader
   // is responsible for setting
   gl_Position = m_proj*a_position;
-}`;
-
-export default vertexShader;
+}`;export default vertexShader;

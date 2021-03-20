@@ -1,8 +1,8 @@
 import { Matrix4x4 } from '../utils/Math';
 import { getFileContents } from '../utils/utils';
 import WebGLContextProvider from './WebGLContextProvider';
-import fragShader from './fragShader';
-import vertexShader from './vertexShader';
+import fragShader from './shaders/fragShader';
+import vertexShader from './shaders/vertexShader';
 
 class VertexBuffer
 {
