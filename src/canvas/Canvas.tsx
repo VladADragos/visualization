@@ -1,16 +1,17 @@
 import React, { useRef, useEffect } from "react";
-import Renderer from "./Renderer";
-import { CRect } from "../shapes/Shapes";
-import WebGLContextProvider from './WebGLContextProvider';
-import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "./Core";
-import { Matrix4x4 } from "../utils/Math";
 
+// import { CRect } from "../shapes/Shapes";
+// import WebGLContextProvider from '../libwebgl/core/WebGLContexProvider';
+import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "../libwebgl/core/Core";
+import { Matrix4x4 } from "../utils/Math";
+import WebGLContextProvider from '../libwebgl/core/WebGLContexProvider';
+import Renderer from "../libwebgl/Renderer";
 interface canvasProps
 {
   width: number;
   height: number;
-  data?: CRect[];
-  selected?: Set<CRect>;
+  // data?: CRect[];
+  // selected?: Set<CRect>;
   debug?: boolean;
   getCanvas?: (canvas: HTMLCanvasElement) => void
   onClick?: (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>, r: Renderer) => void;
@@ -20,8 +21,6 @@ interface canvasProps
 const Canvas = ({
   width,
   height,
-  data,
-  selected,
   debug = false,
   getCanvas,
   onClick,

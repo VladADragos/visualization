@@ -1,7 +1,9 @@
 import { Matrix4x4 } from "../utils/Math";
-import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "./Core";
-import WebGLContextProvider from "./WebGLContextProvider";
+// import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "../core/Core";
+// import WebGLContextProvider from "../core/WebGLContextProvider";
 
+import { Program, VertexBuffer, IndexBuffer, Shader, ShaderType } from "./core/Core";
+import WebGLContextProvider from "./core/WebGLContexProvider";
 export default class Renderer
 {
   webgl: WebGL2RenderingContext;

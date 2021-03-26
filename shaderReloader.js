@@ -1,13 +1,13 @@
 const fs = require('fs');
 const config = {
 
-    shadersPath: './src/opengl/shaders/',
-    shadersOutPath: './src/canvas/shaders/'
+    shadersSrcPath: './src/libwebgl/shaders/src/',
+    shadersOutPath: './src/libwebgl/shaders/out/'
 }
 const paths = {
-    fragmentShaderSrc: config.shadersPath + 'fragment.glsl',
+    fragmentShaderSrc: config.shadersSrcPath + 'fragment.glsl',
     fragmentShaderOut: config.shadersOutPath + 'fragShader.ts',
-    vertexShaderSrc: config.shadersPath + 'vertex.glsl',
+    vertexShaderSrc: config.shadersSrcPath + 'vertex.glsl',
     vertexShaderOut: config.shadersOutPath + 'vertexShader.ts',
 }
 
