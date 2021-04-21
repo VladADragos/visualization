@@ -3,7 +3,6 @@ import { Matrix4x4 } from "../utils/Math";
 // import WebGLContextProvider from "../core/WebGLContextProvider";
 
 import { Program, VertexBuffer, IndexBuffer, Shader, ShaderType } from "./core/Core";
-import WebGLContextProvider from "./core/WebGLContexProvider";
 export default class Renderer
 {
   webgl: WebGL2RenderingContext;
@@ -16,9 +15,9 @@ export default class Renderer
   vbo!: VertexBuffer;
   ibo!: IndexBuffer;
   drawColor: [number, number, number, number] = [1, 0, 0, 1];
-  constructor(width: number, height: number)
+  constructor(gl: WebGL2RenderingContext, width: number, height: number)
   {
-    this.webgl = WebGLContextProvider.getInstance();
+    this.webgl = gl;
     this.projection = new Matrix4x4();
     this.projection.ortho(0, width, 0, height, -1, 1);
     this.width = width;
@@ -57,8 +56,8 @@ export default class Renderer
   addGeometry(indexArray: number[], data: number[])
   {
     // const indexArray = [0, 1, 2, 2, 3, 0];
-    this.vbo = new VertexBuffer(data, 1);
-    this.ibo = new IndexBuffer(indexArray, 6);
+    this.vbo = new VertexBuffer(this.webgl, data, 1);
+    this.ibo = new IndexBuffer(this.webgl, indexArray, 6);
   }
   addRect(x0: number, y0: number, dx: number, dy: number)
   {
@@ -79,8 +78,8 @@ export default class Renderer
   }
   addShaders()
   {
-    const vertexShader = new Shader(this.program, ShaderType.VERTEX);
-    const fragShader = new Shader(this.program, ShaderType.FRAGMENT);
+    const vertexShader = new Shader(this.webgl, this.program, ShaderType.VERTEX);
+    const fragShader = new Shader(this.webgl, this.program, ShaderType.FRAGMENT);
     vertexShader.bind();
     fragShader.bind();
 

@@ -1,10 +1,8 @@
 import React, { useRef, useEffect } from "react";
 
 // import { CRect } from "../shapes/Shapes";
-// import WebGLContextProvider from '../libwebgl/core/WebGLContexProvider';
 import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "../libwebgl/core/Core";
 import { Matrix4x4 } from "../utils/Math";
-import WebGLContextProvider from '../libwebgl/core/WebGLContexProvider';
 import Renderer from "../libwebgl/Renderer";
 interface canvasProps
 {
@@ -149,9 +147,8 @@ const Canvas = ({
       webgl.viewport(0, 0, webgl.drawingBufferWidth, webgl.drawingBufferHeight);
       webgl.clearColor(0.0, 0.8, 0.5, 1.0);
       webgl.clear(webgl.COLOR_BUFFER_BIT);
-      WebGLContextProvider.setInstance(webgl);
-      renderer = new Renderer(width, height);
-      renderer.program = new Program();
+      renderer = new Renderer(webgl, width, height);
+      renderer.program = new Program(webgl);
       // renderer.addShaders();
 
 

@@ -1,13 +1,11 @@
-import WebGLContextProvider from "./WebGLContexProvider";
-
 class Program
 {
     gl: WebGL2RenderingContext;
     program: WebGLProgram;
-    constructor()
+    constructor(gl: WebGL2RenderingContext)
     {
 
-        this.gl = WebGLContextProvider.getInstance();
+        this.gl = gl;
         const program = this.gl.createProgram();
         if (program) {
             this.program = program;

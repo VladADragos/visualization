@@ -1,4 +1,3 @@
-import WebGLContextProvider from "./WebGLContexProvider";
 import VertexBuffer from './VertexBuffer';
 import VertexBufferLayout from "./VertexBufferLayout";
 
@@ -9,9 +8,9 @@ class VertexArray
     gl: WebGL2RenderingContext;
     vao!: WebGLVertexArrayObject;
 
-    constructor()
+    constructor(gl: WebGL2RenderingContext)
     {
-        this.gl = WebGLContextProvider.getInstance();
+        this.gl = gl;
         const vao = this.gl.createVertexArray();
         if (vao) {
             this.vao = vao;
@@ -38,7 +37,7 @@ class VertexArray
             this.gl.enableVertexAttribArray(i);
             // this.gl.vertexAttribPointer(0, 2, this.gl.FLOAT, false, 0, 0);
             this.gl.vertexAttribPointer(i, element.count, element.type, element.normalized, layout.getStride(), offset);
-            offset += element.count * VertexBufferLayout.getSizeOfType(element.type);
+            offset += element.count * VertexBufferLayout.getSizeOfType(this.gl, element.type);
         }
 
     }

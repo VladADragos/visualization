@@ -1,5 +1,3 @@
-import WebGLContextProvider from '../../canvas/WebGLContextProvider';
-
 class VertexBufferLayotElement
 {
     count: number;
@@ -21,16 +19,16 @@ class VertexBufferLayot
     private stride: number = 0;
     private gl: WebGL2RenderingContext;
 
-    constructor()
+    constructor(gl: WebGL2RenderingContext)
     {
-        this.gl = WebGLContextProvider.getInstance();
+        this.gl = gl;
     }
 
     push(count: number, type: number)
     {
 
         this.elements.push(new VertexBufferLayotElement(count, type, false));
-        this.stride += VertexBufferLayot.getSizeOfType(type);
+        this.stride += VertexBufferLayot.getSizeOfType(this.gl, type);
     }
 
     getElements(): VertexBufferLayotElement[]
@@ -42,16 +40,16 @@ class VertexBufferLayot
         return this.stride;
     }
 
-    static getSizeOfType(type: number): number
+    static getSizeOfType(gl: WebGL2RenderingContext, type: number): number
     {
         switch (type) {
-            case WebGLContextProvider.getInstance().UNSIGNED_INT:
-            case WebGLContextProvider.getInstance().FLOAT:
+            case gl.UNSIGNED_INT:
+            case gl.FLOAT:
                 return 4;
-            case WebGLContextProvider.getInstance().BYTE:
+            case gl.BYTE:
                 return 1;
             default:
-                return 0;
+                return -1;
         }
     }
 }

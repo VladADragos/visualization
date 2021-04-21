@@ -1,13 +1,10 @@
-import WebGLContextProvider from "./WebGLContexProvider";
-
-
 class VertexBuffer 
 {
     gl: WebGL2RenderingContext;
     buffer: WebGLBuffer;
-    constructor(data: number[], size: number)
+    constructor(gl: WebGL2RenderingContext, data: number[], size: number)
     {
-        this.gl = WebGLContextProvider.getInstance();
+        this.gl = gl;
         this.buffer = this.gl.createBuffer() as WebGLBuffer;
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.buffer);
         this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), this.gl.STATIC_DRAW);

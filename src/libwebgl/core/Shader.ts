@@ -1,5 +1,4 @@
 import Program from "./Program";
-import WebGLContextProvider from "./WebGLContexProvider";
 import fragShader from '../shaders/out/fragShader';
 import vertexShader from '../shaders/out/vertexShader';
 
@@ -14,9 +13,9 @@ class Shader
     program: Program;
     shader: Nullable<WebGLShader>;
     shaderType: ShaderType;
-    constructor(program: Program, type: ShaderType)
+    constructor(gl: WebGL2RenderingContext, program: Program, type: ShaderType)
     {
-        this.gl = WebGLContextProvider.getInstance();
+        this.gl = gl;
         this.program = program;
         this.shaderType = type;
         const shaderType = type === ShaderType.FRAGMENT ? this.gl.FRAGMENT_SHADER : this.gl.VERTEX_SHADER;
