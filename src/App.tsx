@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css"
 import Canvas from "./canvas/Canvas";
-import {Matrix4x4,Vec4} from "./utils/Math";
+import { Matrix4x4, Vec4 } from "./utils/Math";
 
 
 // asyncfunction test()
@@ -25,7 +25,7 @@ const App = (): JSX.Element =>
   // m.array.print();
 
 
-
+  console.log("123");
   return (
     <div className="App">
       <Canvas width={1000} height={600} />

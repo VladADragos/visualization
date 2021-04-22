@@ -86,13 +86,15 @@ const Canvas = ({
 
     return arr;
   }
-
+  let color = 0;
   function run(offset: number, y: number)
   {
     if (renderer) {
-
-      renderer.drawRect(0 + offset, 100 + y, 20, 20);
-
+      if (color == 1) {
+        color = 0;
+      }
+      renderer.drawRect(0 + offset, 100 + y, 20, 20, color);
+      color += 0.01;
 
       // renderer.beginRender();
       // renderer.addRect(0 + offset, 100 + y, 20, 20);
@@ -148,7 +150,7 @@ const Canvas = ({
       webgl.clearColor(0.0, 0.8, 0.5, 1.0);
       webgl.clear(webgl.COLOR_BUFFER_BIT);
       renderer = new Renderer(webgl, width, height);
-      renderer.program = new Program(webgl);
+      // renderer.program = new Program(webgl);
       // renderer.addShaders();
 
 
@@ -187,7 +189,7 @@ const Canvas = ({
         width={width}
         height={height}
         ref={canvasRef}
-        style={{ border: "3px gray solid" }}
+        style={{ border: "3px gray solid", backgroundColor: "lightgray" }}
       />
     </>
   );

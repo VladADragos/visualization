@@ -1,3 +1,4 @@
+import Color from "../utils/Color";
 import { Matrix4x4 } from "../utils/Math";
 // import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "../core/Core";
 // import WebGLContextProvider from "../core/WebGLContextProvider";
@@ -14,7 +15,7 @@ export default class Renderer
   height: number;
   vbo!: VertexBuffer;
   ibo!: IndexBuffer;
-  drawColor: [number, number, number, number] = [1, 0, 0, 1];
+  drawColor: Float32Array = new Float32Array([1, 0, 0, 1]);
   constructor(gl: WebGL2RenderingContext, width: number, height: number)
   {
     this.webgl = gl;
@@ -22,6 +23,7 @@ export default class Renderer
     this.projection.ortho(0, width, 0, height, -1, 1);
     this.width = width;
     this.height = height;
+    this.program = new Program(gl);
   }
 
 
@@ -29,7 +31,7 @@ export default class Renderer
   {
     this.projection.ortho(left, right, bottom, top, near, far);
   }
-  beginRender()
+  private beginRender()
   {
     // this.program = new Program();
     this.addShaders();
@@ -37,10 +39,10 @@ export default class Renderer
 
 
   }
-  endRender()
+  private endRender()
   {
     this.program.use();
-    this.fragShader.setUniform4f("inColor", this.drawColor);
+    this.fragShader.setUniform4fv("inColor", this.drawColor);
     this.fragShader.setUniformMat4f("m_proj", this.projection.asArray());
     this.webgl.drawElements(this.webgl.TRIANGLES, this.ibo.getCount(), this.webgl.UNSIGNED_INT, 0);
     // this.f();
@@ -76,7 +78,7 @@ export default class Renderer
 
     return arr;
   }
-  addShaders()
+  private addShaders()
   {
     const vertexShader = new Shader(this.webgl, this.program, ShaderType.VERTEX);
     const fragShader = new Shader(this.webgl, this.program, ShaderType.FRAGMENT);
@@ -87,30 +89,30 @@ export default class Renderer
     this.fragShader = fragShader;
   }
 
-  clearCanvas()
+  private clearCanvas()
   {
 
   }
 
-  drawRect(x0: number, y0: number, dx: number, dy: number)
+  public drawRect(x0: number, y0: number, dx: number, dy: number, color: number)
   {
     this.beginRender();
     this.addRect(x0, y0, dx, dy);
+    //  let l =  this.webgl.getUniformLocation(this.program.program,"inColor");
+    //  this.webgl.uni
+
+    // this.fragShader.setUniform4f("inColor", [1, 1, 0, 0]);
+    // console.log(Color.Red().normalized());
+    // console.log("hello???");
+    // return;
+    // #db8f8f", "db", "8f", "8f" ]
+    // console.log(colorr);
+
+    this.drawColor = Color.fromHex("#db8f8f").normalized();;
+
+    // this.fragShader.
     this.endRender();
+
   }
 
-  normalize(a: number): number
-  {
-    // let h = this.height/2;
-    // let w = this.width/2;
-
-
-    //200,200
-    // 200/ this.height
-    // 200/ this.width
-    //-w..w
-    //-h..h
-
-    return a
-  }
 }

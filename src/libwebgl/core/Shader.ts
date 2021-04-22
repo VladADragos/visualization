@@ -41,7 +41,7 @@ class Shader
         }
     }
 
-    setUniform4f(name: string, arr: [number, number, number, number])
+    setUniform4fv(name: string, arr: Float32Array)
     {
         this.gl.uniform4fv(this.gl.getUniformLocation(this.program.program, name), arr);
     }
