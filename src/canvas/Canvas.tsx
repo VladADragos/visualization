@@ -1,11 +1,10 @@
 import React, { useRef, useEffect } from "react";
 
 // import { CRect } from "../shapes/Shapes";
-import { IndexBuffer, Program, Shader, ShaderType, VertexBuffer } from "../libwebgl/core/Core";
+import { IndexBuffer, Program, Shader, VertexBuffer } from "../libwebgl/core/Core";
 import { Matrix4x4 } from "../utils/Math";
 import Renderer from "../libwebgl/Renderer";
-interface canvasProps
-{
+interface canvasProps {
   width: number;
   height: number;
   // data?: CRect[];
@@ -23,8 +22,7 @@ const Canvas = ({
   getCanvas,
   onClick,
   animation,
-}: canvasProps): JSX.Element =>
-{
+}: canvasProps): JSX.Element => {
   if (debug) console.log("canvas mounted");
   const canvasRef: React.MutableRefObject<Nullable<HTMLCanvasElement>> = useRef(
     null
@@ -59,21 +57,20 @@ const Canvas = ({
 
   let off = 0;
   let diff = 10;
-  function draw(step: number): number
-  {
+  function draw(step: number): number {
 
-    run(off, 100);
-    run(off, 0);
-    run(off, -100);
-    off += diff;
-    if ((off + 20) >= width || off <= 0) {
-      diff *= -1;
-    }
+    renderer?.renderingFlow();
+    // run(off, 100);
+    // run(off, 0);
+    // run(off, -100);
+    // off += diff;
+    // if ((off + 20) >= width || off <= 0) {
+    //   diff *= -1;
+    // }
 
     return requestAnimationFrame(draw);
   }
-  function rect(x0: number, y0: number, dx: number, dy: number): number[]
-  {
+  function rect(x0: number, y0: number, dx: number, dy: number): number[] {
     let arr = [
       x0, y0,
       x0 + dx, y0,
@@ -87,8 +84,7 @@ const Canvas = ({
     return arr;
   }
   let color = 0;
-  function run(offset: number, y: number)
-  {
+  function run(offset: number, y: number) {
     if (renderer) {
       if (color == 1) {
         color = 0;
@@ -139,13 +135,13 @@ const Canvas = ({
   }
 
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     if (debug) console.log("first render");
     // const ctx = canvasRef.current?.getContext("2d");
     const webgl = canvasRef.current?.getContext("webgl2");
     if (webgl) {
       // assert(true);
+      console.log("CANVAS ", webgl.COLOR_BUFFER_BIT);
       webgl.viewport(0, 0, webgl.drawingBufferWidth, webgl.drawingBufferHeight);
       webgl.clearColor(0.0, 0.8, 0.5, 1.0);
       webgl.clear(webgl.COLOR_BUFFER_BIT);
@@ -173,8 +169,7 @@ const Canvas = ({
     // }
   }, [debug]);
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     const handle = draw(0);
     if (debug) console.log("canvas drawn");
     // return () => cancelAnimationFrame(handle);

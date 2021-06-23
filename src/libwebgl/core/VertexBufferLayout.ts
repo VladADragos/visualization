@@ -1,55 +1,44 @@
-class VertexBufferLayotElement
-{
+import * as  webglConstants from "./webglConstants";
+
+class VertexBufferLayotElement {
     count: number;
-    type: number;
-    normalized: boolean;
-    constructor(count: number, type: number, normalized: boolean)
-    {
+    type: webglConstants.DataTypes;
+    constructor(count: number, type: webglConstants.DataTypes) {
         this.count = count;
         this.type = type;
-        this.normalized = normalized;
     }
 
 
 }
 
-class VertexBufferLayot
-{
+class VertexBufferLayot {
     private elements: VertexBufferLayotElement[] = [];
     private stride: number = 0;
-    private gl: WebGL2RenderingContext;
 
-    constructor(gl: WebGL2RenderingContext)
-    {
-        this.gl = gl;
+
+
+    push(count: number, type: webglConstants.DataTypes) {
+
+        this.elements.push(new VertexBufferLayotElement(count, type));
+        // this.stride += VertexBufferLayot.getSizeOfType(type);
     }
 
-    push(count: number, type: number)
-    {
-
-        this.elements.push(new VertexBufferLayotElement(count, type, false));
-        this.stride += VertexBufferLayot.getSizeOfType(this.gl, type);
-    }
-
-    getElements(): VertexBufferLayotElement[]
-    {
+    getElements(): VertexBufferLayotElement[] {
         return this.elements;
     }
-    getStride(): number
-    {
+    getStride(): number {
         return this.stride;
     }
 
-    static getSizeOfType(gl: WebGL2RenderingContext, type: number): number
-    {
+    static getSizeOfType(type: webglConstants.DataTypes): number {
         switch (type) {
-            case gl.UNSIGNED_INT:
-            case gl.FLOAT:
+            case webglConstants.DataTypes.UNSIGNED_INT:
+            case webglConstants.DataTypes.FLOAT:
                 return 4;
-            case gl.BYTE:
+            case webglConstants.DataTypes.BYTE:
                 return 1;
             default:
-                return -1;
+                throw new Error(`${type} is an invalid type`);
         }
     }
 }

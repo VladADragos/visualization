@@ -1,0 +1,14 @@
+ctrl+l select line
+
+ctrl+shift+o search symbols
+
+ctrl+shift+g go to line nr
+
+ctrl+x cut line
+
+alt+enter select all occurences of find match
+
+alt+f show definition
+
+ctrl+1/2 to select split view
+alt+1..n to select tab n

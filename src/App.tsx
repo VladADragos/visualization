@@ -10,7 +10,7 @@ import { Matrix4x4, Vec4 } from "./utils/Math";
 //   console.log(a);
 
 // }
-const App = (): JSX.Element =>
+const App = (): JSX.Element  =>
 {
 
   // test();
@@ -24,8 +24,8 @@ const App = (): JSX.Element =>
   // m.scale(0.5);
   // m.array.print();
 
-
   console.log("123");
+
   return (
     <div className="App">
       <Canvas width={1000} height={600} />
